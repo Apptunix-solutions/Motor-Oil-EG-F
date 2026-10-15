@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatPrice } from '@/lib/utils'
 import { computed, ref } from 'vue'
 import {
   ArrowDownUp,
@@ -299,7 +300,7 @@ function resetSearch() {
           </p>
         </div>
         <div class="text-right">
-          <p class="text-sm font-bold text-white">EGP {{ product.price.toFixed(2) }}</p>
+          <p class="text-sm font-bold text-white">{{ formatPrice(product.price) }}</p>
           <span class="mt-2 flex items-center justify-end gap-1 text-[11px] text-[#F5A710]"
             ><Star :size="12" fill="currentColor" stroke="none" />{{ product.rating }}</span
           >

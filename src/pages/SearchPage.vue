@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatPrice } from '@/lib/utils'
 import { computed, ref } from 'vue'
 import { ArrowLeft, Clock3, Search, X } from 'lucide-vue-next'
 import { RouterLink, useRouter } from 'vue-router'
@@ -109,7 +110,7 @@ function openShop() {
             ><span class="mt-1 block text-[11px] text-[#8E96A3]"
               >{{ product.brand }} · {{ product.viscosity }}</span
             ></span
-          ><span class="text-sm font-bold text-white">EGP {{ product.price.toFixed(2) }}</span>
+          ><span class="text-sm font-bold text-white">{{ formatPrice(product.price) }}</span>
         </button>
       </div>
       <div v-else class="py-12 text-center">

@@ -1,25 +1,59 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { z } from 'zod'
+import { readStored, writeStored } from '@/lib/storage'
 import type { Order } from '@/types/order'
 import type { CartLine, OrderAddress } from '@/types/cart'
+import type { Product } from '@/types/product'
 
-const savedOrders = localStorage.getItem('motor-oil-eg-orders')
+const STORAGE_KEY = 'motor-oil-eg-orders'
+
+const productSchema = z.custom<Product>(
+  (value) =>
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as { id?: unknown }).id === 'string' &&
+    typeof (value as { price?: unknown }).price === 'number',
+)
+
+const ordersSchema = z.array(
+  z.object({
+    id: z.string(),
+    createdAt: z.string(),
+    status: z.enum(['Processing', 'Shipped', 'Delivered']),
+    total: z.number().nonnegative(),
+    itemCount: z.number().int().nonnegative(),
+    address: z.object({
+      name: z.string(),
+      street: z.string(),
+      city: z.string(),
+      postalCode: z.string(),
+      phone: z.string().optional(),
+    }),
+    lines: z.array(z.object({ product: productSchema, quantity: z.number().int().positive() })),
+  }),
+)
+
+function createOrderId() {
+  return `MOEG-${crypto.randomUUID().replace(/-/g, '').slice(0, 10).toUpperCase()}`
+}
 
 export const useOrdersStore = defineStore('orders', () => {
-  const orders = ref<Order[]>(savedOrders ? (JSON.parse(savedOrders) as Order[]) : [])
+  const orders = ref<Order[]>(readStored(STORAGE_KEY, ordersSchema, []))
 
   function create(lines: CartLine[], address: OrderAddress, total: number) {
+    if (!lines.length) throw new Error('Cannot create an order without items')
     const order: Order = {
-      id: `MOEG-${Date.now().toString().slice(-6)}`,
+      id: createOrderId(),
       createdAt: new Date().toISOString(),
       status: 'Processing',
       total,
       itemCount: lines.reduce((sum, line) => sum + line.quantity, 0),
       address,
-      lines,
+      lines: lines.map((line) => ({ ...line })),
     }
     orders.value = [order, ...orders.value]
-    localStorage.setItem('motor-oil-eg-orders', JSON.stringify(orders.value))
+    writeStored(STORAGE_KEY, orders.value)
     return order
   }
 

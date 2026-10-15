@@ -1,23 +1,34 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { z } from 'zod'
+import { readStored, writeStored } from '@/lib/storage'
+import { vehicleSchema } from '@/stores/vehicle'
 import type { UserPreferences } from '@/types/user'
 
+const STORAGE_KEY = 'motor-oil-eg-preferences'
+
 const defaultPreferences: UserPreferences = {
-  name: 'Alex Morgan',
-  email: 'alex@motor-oil-eg.com',
+  name: '',
+  email: '',
   vehicle: null,
   notifications: true,
 }
-const savedPreferences = localStorage.getItem('motor-oil-eg-preferences')
+
+const preferencesSchema = z.object({
+  name: z.string().max(80),
+  email: z.string().max(254),
+  vehicle: vehicleSchema.nullable(),
+  notifications: z.boolean(),
+})
 
 export const useUserStore = defineStore('user', () => {
   const preferences = ref<UserPreferences>(
-    savedPreferences ? (JSON.parse(savedPreferences) as UserPreferences) : defaultPreferences,
+    readStored(STORAGE_KEY, preferencesSchema, defaultPreferences),
   )
 
   function update(next: Partial<UserPreferences>) {
     preferences.value = { ...preferences.value, ...next }
-    localStorage.setItem('motor-oil-eg-preferences', JSON.stringify(preferences.value))
+    writeStored(STORAGE_KEY, preferences.value)
   }
 
   return { preferences, update }

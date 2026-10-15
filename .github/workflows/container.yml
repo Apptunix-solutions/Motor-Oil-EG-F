@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Build image
         run: docker build --file docker/Dockerfile --tag motor-oil-eg:test .
