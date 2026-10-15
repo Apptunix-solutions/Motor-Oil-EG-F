@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatPrice } from '@/lib/utils'
 import { computed, ref } from 'vue'
 import {
   ArrowLeft,
@@ -108,10 +109,12 @@ function toggleSaved() {
           {{ product.description }}
         </p>
         <div class="mt-7 flex items-end gap-3">
-          <span class="display-font text-4xl font-bold tracking-tight text-white"
-            >EGP {{ product.price.toFixed(2) }}</span
-          ><span v-if="product.originalPrice" class="pb-1 text-sm text-[#68707D] line-through"
-            >EGP {{ product.originalPrice.toFixed(2) }}</span
+          <span class="display-font text-4xl font-bold tracking-tight text-white">{{
+            formatPrice(product.price)
+          }}</span
+          ><span v-if="product.originalPrice" class="pb-1 text-sm text-[#68707D] line-through">{{
+            formatPrice(product.originalPrice)
+          }}</span
           ><span
             class="mb-1 rounded-full bg-[#58D5E6]/10 px-2 py-1 text-[10px] font-bold text-[#58D5E6]"
             >In stock · {{ product.stock }} left</span

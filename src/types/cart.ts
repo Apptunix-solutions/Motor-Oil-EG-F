@@ -10,4 +10,5 @@ export interface OrderAddress {
   street: string
   city: string
   postalCode: string
+  phone?: string
 }

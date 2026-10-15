@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ArrowRight, ArrowLeft, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
+import { formatPrice } from '@/lib/utils'
 import { useCartStore } from '@/stores/cart'
 
 const cart = useCartStore()
-const shipping = 0
 </script>
 
 <template>
@@ -77,9 +77,9 @@ const shipping = 0
                     <Plus :size="13" />
                   </button>
                 </div>
-                <strong class="text-sm text-white"
-                  >EGP {{ (line.product.price * line.quantity).toFixed(2) }}</strong
-                >
+                <strong class="text-sm text-white">{{
+                  formatPrice(line.product.price * line.quantity)
+                }}</strong>
               </div>
             </div>
           </div>
@@ -89,7 +89,7 @@ const shipping = 0
         <h2 class="display-font text-xl font-bold text-white">Order summary</h2>
         <div class="mt-6 space-y-3 border-b border-white/[0.08] pb-5 text-xs">
           <div class="flex justify-between text-[#8E96A3]">
-            <span>Subtotal</span><span class="text-white">EGP {{ cart.subtotal.toFixed(2) }}</span>
+            <span>Subtotal</span><span class="text-white">{{ formatPrice(cart.subtotal) }}</span>
           </div>
           <div class="flex justify-between text-[#8E96A3]">
             <span>Shipping</span><span class="text-[#58D5E6]">Free</span>
@@ -97,16 +97,16 @@ const shipping = 0
         </div>
         <div class="mt-5 flex justify-between">
           <span class="text-sm font-semibold text-white">Total</span
-          ><strong class="display-font text-2xl text-white"
-            >EGP {{ (cart.subtotal + shipping).toFixed(2) }}</strong
-          >
+          ><strong class="display-font text-2xl text-white">{{
+            formatPrice(cart.subtotal)
+          }}</strong>
         </div>
         <RouterLink
           to="/checkout"
           class="mt-6 flex h-12 items-center justify-center gap-2 rounded-xl bg-[#F5A710] text-sm font-bold text-[#0B0D10] hover:bg-[#FFC233]"
           >Checkout <ArrowRight :size="16"
         /></RouterLink>
-        <p class="mt-4 text-center text-[10px] text-[#68707D]">Secure checkout · 30-day returns</p>
+        <p class="mt-4 text-center text-[10px] text-[#68707D]">Cash on delivery · 30-day returns</p>
       </aside>
     </div>
     <div v-else class="flex min-h-[65vh] items-center justify-center py-16">

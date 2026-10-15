@@ -1,20 +1,29 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { z } from 'zod'
+import { readStored, removeStored, writeStored } from '@/lib/storage'
 import type { Vehicle } from '@/types/vehicle'
 
-const savedVehicle = localStorage.getItem('motor-oil-eg-vehicle')
+const STORAGE_KEY = 'motor-oil-eg-vehicle'
+
+export const vehicleSchema = z.object({
+  make: z.string().max(60),
+  model: z.string().max(60),
+  year: z.number().int().min(1950).max(2100),
+  engine: z.string().max(60),
+})
 
 export const useVehicleStore = defineStore('vehicle', () => {
-  const vehicle = ref<Vehicle | null>(savedVehicle ? (JSON.parse(savedVehicle) as Vehicle) : null)
+  const vehicle = ref<Vehicle | null>(readStored(STORAGE_KEY, vehicleSchema.nullable(), null))
 
   function select(nextVehicle: Vehicle) {
     vehicle.value = nextVehicle
-    localStorage.setItem('motor-oil-eg-vehicle', JSON.stringify(nextVehicle))
+    writeStored(STORAGE_KEY, nextVehicle)
   }
 
   function clear() {
     vehicle.value = null
-    localStorage.removeItem('motor-oil-eg-vehicle')
+    removeStored(STORAGE_KEY)
   }
 
   return { vehicle, select, clear }

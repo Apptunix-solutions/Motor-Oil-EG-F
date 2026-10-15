@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatPrice } from '@/lib/utils'
 import { Check, Heart, ShoppingCart, Star } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
@@ -81,9 +82,9 @@ function toggleSaved() {
           <span
             v-if="product.originalPrice"
             class="mb-0.5 text-[12px] font-medium text-[#68696A] line-through decoration-[#68696A]"
-            >EGP {{ product.originalPrice.toFixed(0) }}</span
+            >{{ formatPrice(product.originalPrice) }}</span
           >
-          <span class="text-[18px] font-medium text-white">EGP {{ product.price.toFixed(0) }}</span>
+          <span class="text-[18px] font-medium text-white">{{ formatPrice(product.price) }}</span>
         </div>
         <button
           class="favorite-button mb-0.5 grid h-8 w-8 place-items-center text-[#F5A710] transition hover:scale-110"

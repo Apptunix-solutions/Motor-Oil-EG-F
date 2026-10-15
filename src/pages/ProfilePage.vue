@@ -10,6 +10,7 @@ import {
   UserRound,
 } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
+import { formatPrice } from '@/lib/utils'
 import { useOrdersStore } from '@/stores/orders'
 import { useUserStore } from '@/stores/user'
 import { useVehicleStore } from '@/stores/vehicle'
@@ -33,7 +34,8 @@ const menu = [
       <div>
         <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#F5A710]">Your garage</p>
         <h1 class="display-font mt-2 text-4xl font-bold tracking-[-0.06em] text-white">
-          Hey, {{ user.preferences.name.split(' ')[0] }}<span class="text-[#F5A710]">.</span>
+          Hey, {{ user.preferences.name.trim().split(/\s+/)[0] || 'there'
+          }}<span class="text-[#F5A710]">.</span>
         </h1>
       </div>
       <div class="grid h-12 w-12 place-items-center rounded-2xl bg-[#F5A710] text-[#0B0D10]">
@@ -104,7 +106,7 @@ const menu = [
             {{ new Date(orders.orders[0].createdAt).toLocaleDateString() }}
           </p>
         </div>
-        <strong class="text-sm text-white">EGP {{ orders.orders[0].total.toFixed(2) }}</strong>
+        <strong class="text-sm text-white">{{ formatPrice(orders.orders[0].total) }}</strong>
       </div>
     </div>
     <div class="mt-8 overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#14171C]">
