@@ -53,9 +53,8 @@
 html {
   min-width: 320px;
   background: var(--bg);
-  scrollbar-width: thin;
-  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
 }
+
 body {
   min-width: 320px;
   min-height: 100vh;
@@ -81,72 +80,54 @@ button {
   color: var(--text);
 }
 
-/* ═══ شريط التمرير: رفيع 6px + إخفاء كامل لأسهم التمرير (▲▼) كما في 7-motors ═══ */
-::-webkit-scrollbar,
+/* ═══════════════════════════════════════════════════════════════════
+   Scrollbar — thin 6px, no arrows (▲▼), matches 7-motors style
+   ═══════════════════════════════════════════════════════════════════
+   Firefox / modern browsers  → scrollbar-width + scrollbar-color on html
+   Chrome / Edge / Safari     → *::-webkit-scrollbar-* pseudo-elements
+   The bare ::-webkit-scrollbar (without a * prefix) is NOT valid CSS
+   and is ignored by all browsers — removed to avoid dead rules.
+   ─────────────────────────────────────────────────────────────────── */
+
+/* Firefox — set once on the root; inherited by all children */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) transparent;
+}
+
+/* WebKit: size */
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-::-webkit-scrollbar-track,
+
+/* WebKit: track */
 *::-webkit-scrollbar-track {
   background: transparent;
 }
-::-webkit-scrollbar-thumb,
+
+/* WebKit: thumb */
 *::-webkit-scrollbar-thumb {
   background: var(--scroll-thumb);
   border-radius: 9999px;
   transition: background-color 0.2s;
 }
-::-webkit-scrollbar-thumb:hover,
 *::-webkit-scrollbar-thumb:hover {
   background: var(--scroll-thumb-hover);
 }
 
-/* إخفاء أزرار وأسهم التمرير (▲▼) للأعلى والأسفل من الجذور بكل الحالات */
-::-webkit-scrollbar-button,
-*::-webkit-scrollbar-button,
-::-webkit-scrollbar-button:single-button,
-*::-webkit-scrollbar-button:single-button,
-::-webkit-scrollbar-button:vertical:decrement,
-*::-webkit-scrollbar-button:vertical:decrement,
-::-webkit-scrollbar-button:vertical:increment,
-*::-webkit-scrollbar-button:vertical:increment,
-::-webkit-scrollbar-button:horizontal:decrement,
-*::-webkit-scrollbar-button:horizontal:decrement,
-::-webkit-scrollbar-button:horizontal:increment,
-*::-webkit-scrollbar-button:horizontal:increment,
-::-webkit-scrollbar-button:start,
-*::-webkit-scrollbar-button:start,
-::-webkit-scrollbar-button:end,
-*::-webkit-scrollbar-button:end,
-::-webkit-scrollbar-button:vertical:start:increment,
-::-webkit-scrollbar-button:vertical:end:decrement,
-::-webkit-scrollbar-button:vertical:start:decrement,
-::-webkit-scrollbar-button:vertical:end:increment,
-::-webkit-scrollbar-button:horizontal:start:increment,
-::-webkit-scrollbar-button:horizontal:end:decrement,
-::-webkit-scrollbar-button:horizontal:start:decrement,
-::-webkit-scrollbar-button:horizontal:end:increment {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  background: transparent !important;
+/* WebKit: hide ALL arrow buttons (▲▼◄►) in every direction/position.
+   A single *::-webkit-scrollbar-button rule with display:none is enough —
+   the browser applies it to all button sub-types automatically. */
+*::-webkit-scrollbar-button {
+  display: none !important;
   width: 0 !important;
   height: 0 !important;
-  display: none !important;
 }
 
-::-webkit-scrollbar-corner,
+/* WebKit: hide the bottom-right corner square */
 *::-webkit-scrollbar-corner {
-  background: transparent !important;
-}
-
-@supports not selector(::-webkit-scrollbar) {
-  html,
-  body {
-    scrollbar-width: thin;
-    scrollbar-color: var(--scroll-thumb) transparent;
-  }
+  background: transparent;
 }
 
 /* فئات إخفاء شريط التمرير بالكامل للعناصر الأفقية والتمرير باللمس */
