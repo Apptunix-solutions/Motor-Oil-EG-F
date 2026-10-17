@@ -155,18 +155,21 @@ function handleFacebookLogin() {
         aria-modal="true"
         :aria-label="mode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب'"
       >
-        <!-- طبقة الخلفية الضبابية (للعرض البصري فقط — الإغلاق يعالجه غلاف التوسيط أدناه) -->
-        <div class="fixed inset-0 bg-black/70 backdrop-blur-md" aria-hidden="true"></div>
-
-        <!-- غلاف التوسيط: min-h-full يضمن بقاء قمة البطاقة قابلة للوصول حتى على الشاشات القصيرة،
-             و @mousedown.self على هذا الغلاف (لا على الحاوية) ليعمل الإغلاق بالنقر خارج النافذة -->
+        <!-- طبقة الخلفية الضبابية: تغطي الشاشة كلها وتستقبل النقر خارج النافذة للإغلاق -->
         <div
-          class="relative flex min-h-full items-end justify-center sm:items-center"
+          class="fixed inset-0 bg-black/70 backdrop-blur-md"
+          aria-hidden="true"
           @mousedown.self="ui.closeAuth()"
+        ></div>
+
+        <!-- غلاف التوسيط: min-h-full يضمن بقاء قمة البطاقة قابلة للوصول حتى على الشاشات القصيرة.
+             pointer-events-none يسمح لنقرات الخلفية بالوصول إلى طبقة الإغلاق، والبطاقة تستعيدها -->
+        <div
+          class="pointer-events-none relative flex min-h-full items-end justify-center sm:items-center"
         >
           <Transition name="auth-card" appear>
             <div
-              class="relative z-10 w-full max-w-[420px] overflow-hidden rounded-[24px] border border-[var(--line)] bg-[var(--panel)] shadow-[0_24px_64px_rgba(0,0,0,0.6)]"
+              class="pointer-events-auto relative z-10 w-full max-w-[420px] overflow-hidden rounded-[24px] border border-[var(--line)] bg-[var(--panel)] shadow-[0_24px_64px_rgba(0,0,0,0.6)]"
             >
               <!-- شريط ذهبي علوي متدرج -->
               <div
