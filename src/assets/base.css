@@ -9,13 +9,15 @@
   --muted: #8e96a3;
   --soft: #a8afba;
   --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.15);
   --glass: rgba(255, 255, 255, 0.04);
   --glass-strong: rgba(255, 255, 255, 0.1);
   --inverse: #0b0d10;
-  --orange: #f5a710;
-  --orange-soft: #f5a710;
-  --cyan: #58d5e6;
+  --orange: #e8a020;
+  --orange-soft: #f5c060;
+  --green: #22c55e;
+  --green-soft: #4ade80;
+  --cyan: #38bdf8;
   --scroll-track: #111419;
   --scroll-thumb: #39414d;
   --scroll-thumb-hover: #586474;
@@ -23,24 +25,26 @@
 
 [data-theme='light'] {
   color-scheme: light;
-  --bg: #f4f6f8;
+  --bg: #f8fafc;
   --panel: #ffffff;
-  --elevated: #eef1f4;
+  --elevated: #f1f5f9;
   --input: #ffffff;
-  --text: #12161d;
-  --muted: #68717d;
-  --soft: #4e5865;
-  --line: rgba(15, 23, 42, 0.11);
-  --line-strong: rgba(15, 23, 42, 0.2);
-  --glass: rgba(15, 23, 42, 0.04);
-  --glass-strong: rgba(15, 23, 42, 0.1);
+  --text: #0f172a;
+  --muted: #64748b;
+  --soft: #334155;
+  --line: rgba(15, 23, 42, 0.08);
+  --line-strong: rgba(15, 23, 42, 0.16);
+  --glass: rgba(15, 23, 42, 0.03);
+  --glass-strong: rgba(15, 23, 42, 0.07);
   --inverse: #ffffff;
-  --orange: #c98500;
-  --orange-soft: #c98500;
-  --cyan: #147b8b;
-  --scroll-track: #e6eaf0;
-  --scroll-thumb: #b5beca;
-  --scroll-thumb-hover: #8c99a8;
+  --orange: #d97706;
+  --orange-soft: #b45309;
+  --green: #16a34a;
+  --green-soft: #15803d;
+  --cyan: #0284c7;
+  --scroll-track: #e2e8f0;
+  --scroll-thumb: #cbd5e1;
+  --scroll-thumb-hover: #94a3b8;
 }
 
 * {
@@ -58,6 +62,12 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
+  /* خط القاهرة للنصوص العربية: أحجام أوضح وارتفاع سطر مريح للعين السورية */
+  font-family: 'Cairo', 'Segoe UI', Tahoma, ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  /* منع التكبير التلقائي في Safari وإبقاء المقاسات متناسقة */
+  -webkit-text-size-adjust: 100%;
 }
 button,
 input {
@@ -71,40 +81,61 @@ button {
   color: var(--text);
 }
 
+/* ═══ الشريط الجانبي: رفيع 6px + إخفاء كامل لأسهم التمرير (▲▼) ═══ */
 *::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
 }
 *::-webkit-scrollbar-track {
   background: var(--scroll-track);
-  border-radius: 99px;
 }
 *::-webkit-scrollbar-thumb {
   background: var(--scroll-thumb);
-  border: 2px solid var(--scroll-track);
-  border-radius: 99px;
+  border-radius: 10px;
 }
 *::-webkit-scrollbar-thumb:hover {
   background: var(--scroll-thumb-hover);
 }
-.no-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: block;
-  height: 7px;
-}
-.no-scrollbar::-webkit-scrollbar-track {
-  background: var(--scroll-track);
-}
-.no-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--scroll-thumb);
-  border: 0;
+
+/* إخفاء أسهم التمرير (▲▼) في المتصفحات بالكامل وبشكل قاطع */
+::-webkit-scrollbar-button,
+*::-webkit-scrollbar-button,
+::-webkit-scrollbar-button:start,
+::-webkit-scrollbar-button:end,
+::-webkit-scrollbar-button:vertical:start:increment,
+::-webkit-scrollbar-button:vertical:end:decrement,
+::-webkit-scrollbar-button:vertical:start:decrement,
+::-webkit-scrollbar-button:vertical:end:increment,
+::-webkit-scrollbar-button:horizontal:start:increment,
+::-webkit-scrollbar-button:horizontal:end:decrement,
+::-webkit-scrollbar-button:horizontal:start:decrement,
+::-webkit-scrollbar-button:horizontal:end:increment {
+  display: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  background: transparent !important;
+  border: none !important;
 }
 
+/* فئات إخفاء شريط التمرير بالكامل للعناصر الأفقية والتمرير باللمس */
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* خط عرض للعناوين: القاهرة بوزن ثقيل — تدعم العربية بالكامل ( unlike Space Grotesk ) */
 .display-font {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Cairo', 'Segoe UI', Tahoma, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 800;
+  /* العربية لا تقبل التباعد السالب بين الأحرف */
+  letter-spacing: normal;
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -119,4 +150,68 @@ button {
 .fade-leave-to {
   opacity: 0;
   transform: translateY(-4px);
+}
+
+/* ═══ زر تبديل السمة: مورف الأيقونة (☀ ↔ ☾) ═══════════════════════ */
+.theme-icon {
+  transition:
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+/* الأيقونة النشطة: مرئية في وضعها الطبيعي */
+.theme-icon--active {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+/* الأيقونة الخارجة إلى الأعلى (الشمس عند التبديل للداكن) */
+.theme-icon--hidden-up {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.25);
+  pointer-events: none;
+}
+/* الأيقونة الخارجة إلى الأسفل (القمر عند التبديل للفاتح) */
+.theme-icon--hidden-down {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.25);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   انتقال السمة — كشف دائري ينطلق من موضع الزر (View Transitions API)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ① إيقاف الـ crossfade الافتراضي */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ② اللقطة القديمة في الخلفية */
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+/* ③ اللقطة الجديدة تتوسع ككشف دائري يبدأ من إحداثيات مركز الزر */
+::view-transition-new(root) {
+  z-index: 99999;
+  animation: theme-reveal-circle 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes theme-reveal-circle {
+  from {
+    clip-path: circle(0px at var(--theme-toggle-x, 50%) var(--theme-toggle-y, 50%));
+  }
+  to {
+    clip-path: circle(150vmax at var(--theme-toggle-x, 50%) var(--theme-toggle-y, 50%));
+  }
+}
+
+/* ④ احترام تفضيل تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
 }

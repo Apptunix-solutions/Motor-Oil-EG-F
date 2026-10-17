@@ -1,14 +1,14 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 withDefaults(defineProps<{ tone?: 'orange' | 'cyan' | 'neutral' }>(), { tone: 'neutral' })
 </script>
 
 <template>
   <span
-    class="inline-flex items-center rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em]"
+    class="inline-flex items-center rounded-full border px-2.5 py-1 text-[12px] font-bold"
     :class="{
-      'border-[#F5A710]/25 bg-[#F5A710]/[0.1] text-[#F5A710]': tone === 'orange',
-      'border-[#58D5E6]/25 bg-[#58D5E6]/10 text-[#58D5E6]': tone === 'cyan',
-      'border-white/10 bg-white/[0.06] text-[#A8AFBA]': tone === 'neutral',
+      'border-[#E8A020]/25 bg-[#E8A020]/[0.1] text-[#E8A020]': tone === 'orange',
+      'border-[#0F3D20]/60 bg-[#0F3D20]/25 text-[#7FD6A0]': tone === 'cyan',
+      'border-[var(--line)] bg-[var(--glass)] text-[var(--soft)]': tone === 'neutral',
     }"
     ><slot
   /></span>

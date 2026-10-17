@@ -25,10 +25,10 @@ jobs:
           persist-credentials: false
 
       - name: Build image
-        run: docker build --file docker/Dockerfile --tag motor-oil-eg:test .
+        run: docker build --file docker/Dockerfile --tag zaytstore:test .
 
       - name: Start container
-        run: docker run --detach --name motor-oil-eg-test --publish 18080:8080 motor-oil-eg:test
+        run: docker run --detach --name zaytstore-test --publish 18080:8080 zaytstore:test
 
       - name: Check health endpoint
         run: |
@@ -38,7 +38,7 @@ jobs:
             fi
             sleep 2
           done
-          docker logs motor-oil-eg-test
+          docker logs zaytstore-test
           exit 1
 
       - name: Check SPA fallback
@@ -46,4 +46,4 @@ jobs:
 
       - name: Stop container
         if: always()
-        run: docker stop motor-oil-eg-test || true
+        run: docker stop zaytstore-test || true

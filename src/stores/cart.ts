@@ -7,7 +7,7 @@ import type { CartLine } from '@/types/cart'
 import type { Product } from '@/types/product'
 
 export const MAX_QUANTITY_PER_ITEM = 20
-const STORAGE_KEY = 'motor-oil-eg-cart'
+const STORAGE_KEY = 'zaytstore-cart'
 
 const cartSchema = z.record(z.string(), z.number().int().positive().max(MAX_QUANTITY_PER_ITEM))
 

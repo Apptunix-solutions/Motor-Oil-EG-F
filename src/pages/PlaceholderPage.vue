@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ArrowLeft, Construction } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
@@ -9,24 +9,24 @@ defineProps<{ title: string; eyebrow: string }>()
   <div class="flex min-h-[65vh] items-center justify-center py-16">
     <div class="max-w-sm text-center">
       <div
-        class="mx-auto grid h-16 w-16 place-items-center rounded-2xl border border-[#F5A710]/20 bg-[#F5A710]/10 text-[#F5A710]"
+        class="mx-auto grid h-16 w-16 place-items-center rounded-2xl border border-[#E8A020]/20 bg-[#E8A020]/10 text-[#E8A020]"
       >
         <Construction :size="28" />
       </div>
-      <p class="mt-7 text-[10px] font-bold uppercase tracking-[0.18em] text-[#F5A710]">
+      <p class="mt-7 text-xs font-bold uppercase text-[#E8A020]">
         {{ eyebrow }}
       </p>
-      <h1 class="display-font mt-2 text-3xl font-bold tracking-[-0.05em] text-white">
+      <h1 class="display-font mt-2 text-3xl font-bold text-[var(--text)]">
         {{ title }}
       </h1>
-      <p class="mt-3 text-sm leading-relaxed text-[#8E96A3]">
-        This part of your Motor-Oil-EG experience is coming soon. Keep exploring the shop while we
-        build it out.
+      <p class="mt-3 text-sm leading-relaxed text-[var(--muted)]">
+        هذا القسم من تجربة ZaytStore قيد الإنشاء حالياً. تابع تصفّح المتجر وباقي الصفحات بينما نعمل
+        على تجهيزه.
       </p>
       <RouterLink
-        to="/catalog"
-        class="mt-7 inline-flex items-center gap-2 rounded-xl bg-[#F5A710] px-5 py-3 text-xs font-bold text-[#0B0D10]"
-        ><ArrowLeft :size="15" /> Back to the shop</RouterLink
+        to="/products"
+        class="mt-7 inline-flex items-center gap-2 rounded-xl bg-[#E8A020] px-5 py-3 text-xs font-bold text-[#071F0D] transition hover:bg-[#F5C060]"
+        ><ArrowLeft :size="15" /> العودة إلى المتجر</RouterLink
       >
     </div>
   </div>

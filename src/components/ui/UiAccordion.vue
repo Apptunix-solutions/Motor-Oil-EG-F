@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import {
   AccordionContent,
   AccordionHeader,
@@ -17,18 +17,18 @@ defineProps<{ items: Array<{ value: string; title: string; content: string }> }>
       v-for="item in items"
       :key="item.value"
       :value="item.value"
-      class="overflow-hidden rounded-xl border border-white/[0.08] bg-[#14171C]"
+      class="overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--panel)]"
     >
       <AccordionHeader
         ><AccordionTrigger
-          class="group flex w-full items-center justify-between px-4 py-4 text-left text-sm font-semibold text-white outline-none transition hover:text-[#F5A710] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#F5A710]/50"
+          class="group flex w-full items-center justify-between px-4 py-4 text-start text-sm font-semibold text-[var(--text)] outline-none transition hover:text-[#E8A020] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#E8A020]/50"
           ><span>{{ item.title }}</span
           ><ChevronDown
             :size="16"
-            class="text-[#F5A710] transition-transform duration-200 group-data-[state=open]:rotate-180" /></AccordionTrigger
+            class="text-[#E8A020] transition-transform duration-200 group-data-[state=open]:rotate-180" /></AccordionTrigger
       ></AccordionHeader>
       <AccordionContent
-        class="border-t border-white/[0.08] px-4 py-4 text-xs leading-relaxed text-[#8E96A3]"
+        class="border-t border-[var(--line)] px-4 py-4 text-xs leading-relaxed text-[var(--muted)]"
         >{{ item.content }}</AccordionContent
       >
     </AccordionItem>

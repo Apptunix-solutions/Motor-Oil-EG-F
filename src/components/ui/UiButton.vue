@@ -14,10 +14,11 @@ const props = withDefaults(
 const classes = computed(() => ({
   variant: {
     primary:
-      'bg-[#F5A710] text-[#0B0D10] shadow-sm hover:bg-[#FFC233] focus-visible:ring-[#F5A710]/50',
+      'bg-[#E8A020] text-[#071F0D] shadow-sm hover:bg-[#F5C060] focus-visible:ring-[#E8A020]/50',
     secondary:
-      'border border-white/10 bg-white/[0.04] text-white hover:border-white/20 hover:bg-white/[0.08] focus-visible:ring-white/30',
-    ghost: 'text-[#A8AFBA] hover:bg-white/[0.06] hover:text-white focus-visible:ring-white/30',
+      'border border-[var(--line)] bg-[var(--glass)] text-[var(--text)] hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)] focus-visible:ring-[var(--line-strong)]',
+    ghost:
+      'text-[var(--soft)] hover:bg-[var(--glass)] hover:text-[var(--text)] focus-visible:ring-white/30',
   }[props.variant],
   size: {
     default: 'min-h-10 rounded-xl px-4 py-2.5 text-sm',
@@ -31,7 +32,7 @@ const classes = computed(() => ({
   <button
     :type="type"
     :disabled="disabled"
-    class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-bold outline-none transition active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0D10] disabled:pointer-events-none disabled:opacity-50"
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-bold outline-none transition active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] disabled:pointer-events-none disabled:opacity-50"
     :class="classes"
   >
     <slot />

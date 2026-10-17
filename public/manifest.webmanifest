@@ -1,0 +1,26 @@
+{
+  "name": "ZaytStore SY",
+  "short_name": "ZaytStore",
+  "description": "منصة زيت ستور لزيوت وقطع غيار السيارات في سوريا",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0D10",
+  "theme_color": "#0B0D10",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/zaytstore-favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["shopping", "automotive"],
+  "screenshots": []
+}

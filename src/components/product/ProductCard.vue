@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { formatPrice } from '@/lib/utils'
 import { Check, Heart, ShoppingCart, Star } from 'lucide-vue-next'
 import { computed } from 'vue'
@@ -26,30 +26,39 @@ function toggleSaved() {
 <template>
   <UiCard
     as="article"
-    class="product-card group relative min-w-0 overflow-hidden rounded-[20px] border-none bg-[#292A2D] p-0 shadow-none transition duration-300 hover:-translate-y-1 hover:bg-[#333438]"
+    class="product-card group relative min-w-0 overflow-hidden rounded-[20px] border-none bg-[var(--elevated)] p-0 shadow-none transition duration-300 hover:-translate-y-1 hover:bg-[var(--elevated)]"
   >
     <div class="product-visual relative aspect-[1.1] overflow-hidden">
       <RouterLink
         :to="`/product/${product.slug}`"
         class="absolute inset-0 grid place-items-center p-6"
-        :aria-label="`View ${product.name}`"
+        :aria-label="`عرض ${product.name}`"
         ><img
           :src="product.image"
           :alt="product.name"
+          loading="lazy"
           class="h-full w-full object-contain transition duration-500 group-hover:scale-105"
       /></RouterLink>
 
-      <!-- Sale Label -->
-      <span class="absolute left-4 top-4 text-[13px] font-medium tracking-wide text-[#68696A]"
-        >SALE</span
+      <!-- Sale / stock label -->
+      <span
+        v-if="product.stock === 0"
+        class="absolute right-4 top-4 rounded-md bg-[var(--bg)]/85 px-2 py-1 text-[12px] font-bold text-[#E8A020]"
+        >نفذ المخزون</span
+      >
+      <span
+        v-else-if="product.isBestseller"
+        class="absolute right-4 top-4 rounded-md bg-[var(--bg)]/85 px-2 py-1 text-[12px] font-bold text-[#E8A020]"
+        >الأكثر مبيعاً</span
       >
 
       <!-- Cart Button Cutout Wrapper -->
-      <div class="absolute right-0 top-0 rounded-bl-[20px] bg-ink pl-1.5 pb-1.5">
-        <div class="relative bg-[#292A2D] rounded-bl-[16px] rounded-tr-[20px]">
+      <div class="absolute left-0 top-0 rounded-br-[20px] bg-ink pr-1.5 pb-1.5">
+        <div class="relative bg-[var(--elevated)] rounded-br-[16px] rounded-tl-[20px]">
           <button
-            class="cart-button grid h-9 w-[52px] place-items-center rounded-bl-[16px] rounded-br-[4px] rounded-tl-[4px] rounded-tr-[16px] bg-[#F5A710] text-[#0B0D10] transition hover:bg-[#FFC233]"
-            :aria-label="`Add ${product.name} to cart`"
+            class="cart-button grid h-9 w-[52px] place-items-center rounded-br-[16px] rounded-bl-[4px] rounded-tr-[4px] rounded-tl-[16px] bg-[#E8A020] text-[#071F0D] transition hover:bg-[#F5C060] disabled:opacity-50"
+            :disabled="product.stock === 0"
+            :aria-label="`أضف ${product.name} إلى السلة`"
             @click.stop="addToCart"
           >
             <Check v-if="quantity" :size="20" stroke-width="3" />
@@ -63,32 +72,38 @@ function toggleSaved() {
       <div class="min-h-[42px]">
         <RouterLink
           :to="`/product/${product.slug}`"
-          class="line-clamp-2 text-[13px] font-medium uppercase leading-[1.4] text-white/90 transition hover:text-[#F5A710]"
-          >{{ product.brand }} {{ product.name }}</RouterLink
+          class="line-clamp-2 text-[13px] font-medium leading-[1.4] text-[var(--text)] transition hover:text-[#E8A020]"
+          >{{ product.name }}</RouterLink
         >
       </div>
 
-      <div class="mt-2.5 flex items-center gap-2 text-[11px] font-medium">
-        <span class="flex items-center gap-1.5 text-[#F5A710]"
+      <p class="mt-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+        {{ product.brand }} · {{ product.merchantName }}
+      </p>
+
+      <div class="mt-2 flex items-center gap-2 text-[12px] font-medium">
+        <span class="flex items-center gap-1.5 text-[#E8A020]"
           ><Star :size="12" fill="currentColor" stroke-width="0" />{{
             product.rating.toFixed(1)
           }}</span
         >
-        <span class="text-[#68696A]">{{ product.reviewCount }} reviews</span>
+        <span class="text-[var(--muted)]">{{ product.reviewCount }} تقييم</span>
       </div>
 
-      <div class="mt-5 flex items-end justify-between gap-2">
+      <div class="mt-4 flex items-end justify-between gap-2">
         <div class="flex flex-col leading-tight">
           <span
             v-if="product.originalPrice"
-            class="mb-0.5 text-[12px] font-medium text-[#68696A] line-through decoration-[#68696A]"
+            class="mb-0.5 text-[12px] font-medium text-[var(--muted)] line-through decoration-[var(--muted)]"
             >{{ formatPrice(product.originalPrice) }}</span
           >
-          <span class="text-[18px] font-medium text-white">{{ formatPrice(product.price) }}</span>
+          <span class="text-[18px] font-medium text-[var(--text)]">{{
+            formatPrice(product.price)
+          }}</span>
         </div>
         <button
-          class="favorite-button mb-0.5 grid h-8 w-8 place-items-center text-[#F5A710] transition hover:scale-110"
-          :aria-label="saved ? `Remove ${product.name} from wishlist` : `Save ${product.name}`"
+          class="favorite-button mb-0.5 grid h-8 w-8 place-items-center text-[#E8A020] transition hover:scale-110"
+          :aria-label="saved ? `إزالة ${product.name} من المفضلة` : `حفظ ${product.name}`"
           :aria-pressed="saved"
           @click.stop="toggleSaved"
         >

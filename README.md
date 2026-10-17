@@ -1,9 +1,10 @@
-# Motor-Oil-EG — Egyptian Motor Oil Marketplace
+# ZaytStore — منصة زيوت السيارات في سوريا
 
-Motor-Oil-EG is a mobile-first Egyptian marketplace for premium motor oils, lubricants, filters,
-and vehicle fluids. It is designed around quick fitment discovery: search by brand or viscosity, or
-save a vehicle and let the garage surface compatible products. All prices are in EGP (Egyptian
-Pound). Location context defaults to Cairo, Egypt.
+ZaytStore (زيت ستور) is a mobile-first Syrian marketplace for premium motor oils, lubricants,
+filters, and vehicle fluids. It is a 1:1 rebuild of [zaytstores.com](https://zaytstores.com):
+the same catalog, merchants, categories, and Arabic (RTL) wording. All prices are in USD
+(displayed as `15 $`). The whole interface is Arabic-first (`lang="ar" dir="rtl"`) with the
+Cairo typeface. Location context defaults to Damascus, Syria.
 
 ## Stack
 
@@ -35,23 +36,26 @@ npm run build
 
 ## Routes
 
-| Path             | Page                  | Notes                                                 |
-| ---------------- | --------------------- | ----------------------------------------------------- |
-| `/`              | `HomePage.vue`        | Hero, categories, bestsellers, vehicle CTA            |
-| `/about`         | `OnboardingPage.vue`  | Brand story / onboarding                              |
-| `/catalog`       | `CatalogPage.vue`     | Filterable catalog (brand, viscosity, base, category) |
-| `/search`        | `SearchPage.vue`      | Debounced search with recent history                  |
-| `/product/:slug` | `ProductPage.vue`     | Gallery, specs, reviews, add-to-cart                  |
-| `/garage`        | `ProfilePage.vue`     | Saved vehicles, orders, sign out                      |
-| `/garage/add`    | `VehiclePage.vue`     | Make → Model → Year → Engine selector                 |
-| `/cart`          | `CartPage.vue`        | Persistent bag with quantities and totals             |
-| `/checkout`      | `CheckoutPage.vue`    | Delivery/payment form and confirmation                |
-| `/delivery`      | `PlaceholderPage.vue` | Delivery info                                         |
-| `/partners`      | `PlaceholderPage.vue` | B2B partner program                                   |
-| `/help`          | `PlaceholderPage.vue` | Help center / contact                                 |
-| `/error`         | `ErrorPage.vue`       | Error display                                         |
+| Path                                                 | Page                     | Notes                                            |
+| ---------------------------------------------------- | ------------------------ | ------------------------------------------------ |
+| `/`                                                  | `HomePage.vue`           | Hero, categories, bestsellers, merchants CTA     |
+| `/products`                                          | `CatalogPage.vue`        | Filterable catalog (alias `/catalog`)            |
+| `/merchants`                                         | `MerchantsPage.vue`      | All 9 verified merchants (supports `?q=` search) |
+| `/merchants/:id`                                     | `MerchantDetailPage.vue` | Merchant profile, rating, products               |
+| `/product/:slug`                                     | `ProductPage.vue`        | Gallery, specs, reviews, add-to-cart             |
+| `/search`                                            | `SearchPage.vue`         | Debounced search with recent history             |
+| `/about`                                             | `AboutPage.vue`          | About ZaytStore                                  |
+| `/privacy`                                           | `PrivacyPage.vue`        | Privacy policy                                   |
+| `/terms`                                             | `TermsPage.vue`          | Terms of service                                 |
+| `/onboarding`                                        | `OnboardingPage.vue`     | Arabic onboarding slides                         |
+| `/garage`                                            | `ProfilePage.vue`        | Saved vehicles, orders, sign out                 |
+| `/garage/add`                                        | `VehiclePage.vue`        | Make → Model → Year → Engine selector            |
+| `/cart`                                              | `CartPage.vue`           | Persistent bag with quantities and totals        |
+| `/checkout`                                          | `CheckoutPage.vue`       | Delivery/payment form and confirmation           |
+| `/login` `/register` `/delivery` `/partners` `/help` | `PlaceholderPage.vue`    | Arabic stubs                                     |
+| `/error`                                             | `ErrorPage.vue`          | Error display                                    |
 
-**Bottom nav (mobile):** Discover (`/`) · Shop (`/catalog`) · Bag (`/cart`) · Garage (`/garage`)
+**Bottom nav (mobile):** الرئيسية (`/`) · المنتجات (`/products`) · السلة (`/cart`) · حسابي (`/garage`)
 
 ## Architecture
 
@@ -59,8 +63,8 @@ npm run build
 - `src/components/product` — reusable product presentation
 - `src/components/ui` — custom UI primitives (`UiButton`, `UiCard`, `UiBadge`, `UiAccordion`)
 - `src/components/layout` — `AppFooter`, `ErrorBoundary`, `PwaStatus`
-- `src/data` — 15 realistic local catalog products with EGP prices for the MVP
-- `src/stores` — Pinia stores: cart, vehicle, user, wishlist, onboarding, orders, ui
+- `src/data` — the real zaytstores.com catalog: 25 products, 9 merchants, 6 categories (USD)
+- `src/stores` — Pinia stores: cart, vehicle, user, wishlist, onboarding, orders, ui (`zaytstore-*` localStorage keys)
 - `src/types` — domain models: `Product`, `CartLine`, `OrderAddress`, `Vehicle`
 - `src/lib` — pure utilities: `cn()`, `formatPrice()`, `validators.ts`, `errors.ts`
 - `src/router` — all route definitions and `onError` handler
@@ -68,7 +72,8 @@ npm run build
 ## Design system
 
 The visual system is defined in `src/assets/base.css` (CSS variables), `src/assets/main.css`
-(Tailwind imports + Google Fonts), and `tailwind.config.js` (custom color tokens: `ink`, `panel`,
-`elevated`, `orange`, `cyan`). Dark surfaces, amber/orange actions, cyan fitment states, rounded
-cards, and compact Space Grotesk display typography are shared across all screens. No
-`<style scoped>` blocks — all styling via Tailwind utility classes.
+(Tailwind imports + the Cairo Google Font), and `tailwind.config.js` (custom color tokens: `ink`,
+`panel`, `elevated`, `orange` (gold `#E8A020`), `green` (deep `#0F3D20`)). Dark surfaces, gold
+actions, green brand panels, rounded cards, and bold Cairo display typography are shared across
+all screens. Arabic-first sizing: 12px minimum for labels, no negative letter-spacing, generous
+line-height. No `<style scoped>` blocks — all styling via Tailwind utility classes.

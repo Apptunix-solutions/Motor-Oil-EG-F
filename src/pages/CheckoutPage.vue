@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { z } from 'zod'
-import { ArrowLeft, Banknote, Check, Info, MapPin, ShoppingBag } from 'lucide-vue-next'
+import { ArrowRight, Banknote, Check, Info, MapPin, ShoppingBag } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { checkoutSchema, type CheckoutField, type CheckoutForm } from '@/lib/validators'
 import { formatPrice } from '@/lib/utils'
@@ -26,6 +26,23 @@ const form = reactive<CheckoutForm>({
   postalCode: '',
 })
 
+const governorates = [
+  'دمشق',
+  'ريف دمشق',
+  'حلب',
+  'حمص',
+  'حماة',
+  'اللاذقية',
+  'طرطوس',
+  'إدلب',
+  'الرقة',
+  'الحسكة',
+  'دير الزور',
+  'درعا',
+  'السويداء',
+  'القنيطرة',
+]
+
 const fields: {
   key: CheckoutField
   label: string
@@ -37,7 +54,7 @@ const fields: {
 }[] = [
   {
     key: 'email',
-    label: 'Email',
+    label: 'البريد الإلكتروني',
     placeholder: 'you@email.com',
     autocomplete: 'email',
     type: 'email',
@@ -45,24 +62,30 @@ const fields: {
   },
   {
     key: 'phone',
-    label: 'Mobile number',
-    placeholder: '010 1234 5678',
+    label: 'رقم الهاتف',
+    placeholder: '09XXXXXXXX',
     autocomplete: 'tel',
     type: 'tel',
     inputmode: 'tel',
   },
-  { key: 'name', label: 'Full name', placeholder: 'Full name', autocomplete: 'name', wide: true },
+  {
+    key: 'name',
+    label: 'الاسم الكامل',
+    placeholder: 'الاسم الكامل',
+    autocomplete: 'name',
+    wide: true,
+  },
   {
     key: 'street',
-    label: 'Street address',
-    placeholder: '14 Grand Avenue',
+    label: 'العنوان',
+    placeholder: 'الحي، الشارع، رقم البناية',
     autocomplete: 'street-address',
     wide: true,
   },
-  { key: 'city', label: 'City', placeholder: 'Cairo', autocomplete: 'address-level2' },
+  { key: 'city', label: 'المحافظة', placeholder: 'دمشق', autocomplete: 'address-level2' },
   {
     key: 'postalCode',
-    label: 'Postal code',
+    label: 'الرمز البريدي',
     placeholder: '11511',
     autocomplete: 'postal-code',
     inputmode: 'numeric',
@@ -79,7 +102,7 @@ function placeOrder() {
   clearErrors()
 
   if (!cart.lines.length) {
-    formError.value = 'Your bag is empty. Add a product before placing an order.'
+    formError.value = 'سلتك فارغة. أضف منتجاً قبل إتمام الطلب.'
     return
   }
 
@@ -89,7 +112,7 @@ function placeOrder() {
     for (const [key, messages] of Object.entries(errors)) {
       if (messages?.[0]) fieldErrors[key as CheckoutField] = messages[0]
     }
-    formError.value = 'Please fix the highlighted fields.'
+    formError.value = 'يرجى تصحيح الحقول المحددة.'
     const firstInvalid = fields.find((field) => fieldErrors[field.key])
     if (firstInvalid) document.getElementById(`checkout-${firstInvalid.key}`)?.focus()
     return
@@ -109,10 +132,15 @@ function placeOrder() {
     submitted.value = true
   } catch (error) {
     reportError(error, 'checkout')
-    formError.value = 'We could not place your order. Please try again.'
+    formError.value = 'تعذّر إتمام الطلب. يرجى المحاولة مرة أخرى.'
   } finally {
     submitting.value = false
   }
+}
+
+function goToGovernorate() {
+  const select = document.getElementById('checkout-city') as HTMLSelectElement | null
+  if (select) select.focus()
 }
 </script>
 
@@ -120,8 +148,8 @@ function placeOrder() {
   <div class="pb-12 pt-8 sm:pt-14">
     <RouterLink
       to="/cart"
-      class="inline-flex items-center gap-2 text-xs font-semibold text-[#8E96A3] hover:text-white"
-      ><ArrowLeft :size="15" /> Back to bag</RouterLink
+      class="inline-flex items-center gap-2 text-xs font-semibold text-[var(--muted)] hover:text-[var(--text)]"
+      ><ArrowRight :size="15" /> العودة إلى السلة</RouterLink
     >
     <div
       v-if="submitted"
@@ -130,25 +158,23 @@ function placeOrder() {
     >
       <div>
         <div
-          class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#58D5E6]/10 text-[#58D5E6]"
+          class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#E8A020]/10 text-[#E8A020]"
         >
           <Check :size="30" />
         </div>
-        <p class="mt-7 text-[10px] font-bold uppercase tracking-[0.18em] text-[#58D5E6]">
-          Order placed
-        </p>
-        <h1 class="display-font mt-2 text-4xl font-bold tracking-[-0.06em] text-white">
-          Thanks for your order<span class="text-[#F5A710]">.</span>
+        <p class="mt-7 text-[12px] font-bold uppercase text-[#E8A020]">تم استلام الطلب</p>
+        <h1 class="display-font mt-2 text-4xl font-bold text-[var(--text)]">
+          شكراً لطلبك<span class="text-[#E8A020]">.</span>
         </h1>
-        <p class="mt-4 text-sm leading-relaxed text-[#8E96A3]">
-          You&apos;ll pay in cash when your order arrives. Order details for
-          {{ confirmedEmail }} are saved on this device under your garage.
+        <p class="mt-4 text-sm leading-relaxed text-[var(--muted)]">
+          ستدفع نقداً عند وصول طلبك. تم حفظ تفاصيل الطلب لـ
+          {{ confirmedEmail }} على هذا الجهاز.
         </p>
-        <p class="mt-3 text-[11px] font-semibold text-[#58D5E6]">Order {{ orderId }}</p>
+        <p class="mt-3 text-[12px] font-semibold text-[#E8A020]">الطلب {{ orderId }}</p>
         <RouterLink
           to="/"
-          class="mt-7 inline-flex rounded-xl bg-[#F5A710] px-5 py-3 text-xs font-bold text-[#0B0D10]"
-          >Back to discover</RouterLink
+          class="mt-7 inline-flex rounded-xl bg-[#E8A020] px-5 py-3 text-xs font-bold text-[#071F0D]"
+          >العودة للرئيسية</RouterLink
         >
       </div>
     </div>
@@ -156,34 +182,36 @@ function placeOrder() {
       v-else-if="!cart.lines.length"
       class="mx-auto flex min-h-[55vh] max-w-md flex-col items-center justify-center text-center"
     >
-      <div class="grid h-16 w-16 place-items-center rounded-full bg-white/[0.05] text-[#8E96A3]">
+      <div
+        class="grid h-16 w-16 place-items-center rounded-full bg-[var(--glass-strong)] text-[var(--muted)]"
+      >
         <ShoppingBag :size="28" />
       </div>
-      <h1 class="display-font mt-6 text-3xl font-bold tracking-[-0.05em] text-white">
-        Your bag is empty<span class="text-[#F5A710]">.</span>
+      <h1 class="display-font mt-6 text-3xl font-bold text-[var(--text)]">
+        سلتك فارغة<span class="text-[#E8A020]">.</span>
       </h1>
-      <p class="mt-3 text-sm text-[#8E96A3]">Add a product before checking out.</p>
+      <p class="mt-3 text-sm text-[var(--muted)]">أضف منتجاً قبل إتمام الطلب.</p>
       <RouterLink
-        to="/catalog"
-        class="mt-7 inline-flex rounded-xl bg-[#F5A710] px-5 py-3 text-xs font-bold text-[#0B0D10]"
-        >Browse the catalog</RouterLink
+        to="/products"
+        class="mt-7 inline-flex rounded-xl bg-[#E8A020] px-5 py-3 text-xs font-bold text-[#071F0D]"
+        >تصفّح المنتجات</RouterLink
       >
     </div>
     <div v-else class="mt-9 grid gap-8 lg:grid-cols-[1fr_360px]">
       <div>
-        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#F5A710]">Checkout</p>
-        <h1 class="display-font mt-2 text-4xl font-bold tracking-[-0.06em] text-white">
-          Finish your order<span class="text-[#F5A710]">.</span>
+        <p class="text-[12px] font-bold uppercase text-[#E8A020]">إتمام الطلب</p>
+        <h1 class="display-font mt-2 text-4xl font-bold text-[var(--text)]">
+          أكمل طلبك<span class="text-[#E8A020]">.</span>
         </h1>
         <form class="mt-8 space-y-5" novalidate @submit.prevent="placeOrder">
-          <fieldset class="rounded-2xl border border-white/[0.08] bg-[#14171C] p-5 sm:p-7">
-            <legend class="sr-only">Delivery details</legend>
+          <fieldset class="rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-5 sm:p-7">
+            <legend class="sr-only">بيانات التوصيل</legend>
             <div class="flex items-center gap-3" aria-hidden="true">
               <span
-                class="grid h-8 w-8 place-items-center rounded-lg bg-[#F5A710]/10 text-[#F5A710]"
+                class="grid h-8 w-8 place-items-center rounded-lg bg-[#E8A020]/10 text-[#E8A020]"
                 ><MapPin :size="16"
               /></span>
-              <h2 class="text-sm font-semibold text-white">Delivery details</h2>
+              <h2 class="text-sm font-semibold text-[var(--text)]">بيانات التوصيل</h2>
             </div>
             <div class="mt-5 grid gap-4 sm:grid-cols-2">
               <div
@@ -193,7 +221,7 @@ function placeOrder() {
               >
                 <label
                   :for="`checkout-${field.key}`"
-                  class="mb-2 block text-[11px] font-semibold text-[#a8afba]"
+                  class="mb-2 block text-[12px] font-semibold text-[var(--soft)]"
                   >{{ field.label }}</label
                 >
                 <input
@@ -204,43 +232,46 @@ function placeOrder() {
                   :inputmode="field.inputmode"
                   :autocomplete="field.autocomplete"
                   :placeholder="field.placeholder"
+                  :list="field.key === 'city' ? 'governorates' : undefined"
                   :aria-invalid="fieldErrors[field.key] ? 'true' : undefined"
                   :aria-describedby="
                     fieldErrors[field.key] ? `checkout-${field.key}-error` : undefined
                   "
                   required
-                  class="h-[46px] w-full rounded-xl border bg-[#0f1216] px-3.5 text-[13px] text-white outline-none placeholder:text-[#68707d] focus:border-[#f5a710]"
-                  :class="fieldErrors[field.key] ? 'border-red-400/60' : 'border-white/10'"
+                  class="h-[46px] w-full rounded-xl border bg-[var(--input)] px-3.5 text-[13px] text-[var(--text)] outline-none placeholder:text-[var(--muted)] focus:border-[#E8A020]"
+                  :class="fieldErrors[field.key] ? 'border-red-400/60' : 'border-[var(--line)]'"
                 />
                 <p
                   v-if="fieldErrors[field.key]"
                   :id="`checkout-${field.key}-error`"
-                  class="mt-1.5 text-[11px] text-red-300"
+                  class="mt-1.5 text-[12px] text-red-300"
                 >
                   {{ fieldErrors[field.key] }}
                 </p>
               </div>
             </div>
+            <datalist id="governorates">
+              <option v-for="governorate in governorates" :key="governorate" :value="governorate" />
+            </datalist>
           </fieldset>
-          <div class="rounded-2xl border border-white/[0.08] bg-[#14171C] p-5 sm:p-7">
+          <div class="rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-5 sm:p-7">
             <div class="flex items-center gap-3">
               <span
-                class="grid h-8 w-8 place-items-center rounded-lg bg-[#F5A710]/10 text-[#F5A710]"
+                class="grid h-8 w-8 place-items-center rounded-lg bg-[#E8A020]/10 text-[#E8A020]"
                 ><Banknote :size="16"
               /></span>
-              <h2 class="text-sm font-semibold text-white">Payment method</h2>
+              <h2 class="text-sm font-semibold text-[var(--text)]">طريقة الدفع</h2>
             </div>
-            <p class="mt-4 text-sm text-white">Cash on delivery</p>
-            <p class="mt-1 text-xs leading-relaxed text-[#8E96A3]">
-              Pay the courier in cash when your order arrives. No card details are collected.
+            <p class="mt-4 text-sm text-[var(--text)]">الدفع عند الاستلام</p>
+            <p class="mt-1 text-xs leading-relaxed text-[var(--muted)]">
+              ادفع للموصّل نقداً عند وصول طلبك. لا نجمع أي بيانات بطاقات.
             </p>
           </div>
           <p
-            class="flex items-start gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-[11px] leading-relaxed text-[#8E96A3]"
+            class="flex items-start gap-2 rounded-xl border border-[var(--line)] bg-[var(--glass)] px-4 py-3 text-[12px] leading-relaxed text-[var(--muted)]"
           >
             <Info :size="14" class="mt-0.5 shrink-0" aria-hidden="true" />
-            Online ordering is in preview: orders are saved on this device only and are not yet sent
-            to our team.
+            إتمام الطلب عبر ZaytStore يُحفظ على هذا الجهاز حالياً ويتم تأكيده مع التاجر.
           </p>
           <p
             v-if="formError"
@@ -253,30 +284,37 @@ function placeOrder() {
             type="submit"
             :disabled="submitting"
             :aria-busy="submitting"
-            class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#F5A710] text-sm font-bold text-[#0B0D10] hover:bg-[#FFC233] disabled:cursor-not-allowed disabled:opacity-60"
+            class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#E8A020] text-sm font-bold text-[#071F0D] hover:bg-[#F5C060] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {{ submitting ? 'Placing order…' : 'Place order' }}
+            {{ submitting ? 'جارٍ إتمام الطلب…' : 'تأكيد الطلب' }}
             <Check v-if="!submitting" :size="17" aria-hidden="true" />
           </button>
         </form>
+        <button
+          type="button"
+          class="mt-3 text-[12px] text-[var(--muted)] hover:text-[#E8A020]"
+          @click="goToGovernorate"
+        >
+          تحتاج مساعدة في تحديد المحافظة؟
+        </button>
       </div>
-      <aside class="h-fit rounded-[24px] border border-white/[0.08] bg-[#14171C] p-5 sm:p-7">
-        <h2 class="display-font text-xl font-bold text-white">Your order</h2>
-        <div class="mt-5 space-y-4 border-b border-white/[0.08] pb-5">
+      <aside class="h-fit rounded-[24px] border border-[var(--line)] bg-[var(--panel)] p-5 sm:p-7">
+        <h2 class="display-font text-xl font-bold text-[var(--text)]">طلبك</h2>
+        <div class="mt-5 space-y-4 border-b border-[var(--line)] pb-5">
           <div
             v-for="line in cart.lines"
             :key="line.product.id"
             class="flex justify-between gap-3 text-xs"
           >
-            <span class="text-[#8E96A3]">{{ line.quantity }} × {{ line.product.name }}</span
-            ><span class="shrink-0 text-white">{{
+            <span class="text-[var(--muted)]">{{ line.quantity }} × {{ line.product.name }}</span
+            ><span class="shrink-0 text-[var(--text)]">{{
               formatPrice(line.product.price * line.quantity)
             }}</span>
           </div>
         </div>
         <div class="mt-5 flex justify-between">
-          <span class="text-sm font-semibold text-white">Total</span
-          ><strong class="display-font text-2xl text-white">{{
+          <span class="text-sm font-semibold text-[var(--text)]">الإجمالي</span
+          ><strong class="display-font text-2xl text-[var(--text)]">{{
             formatPrice(cart.subtotal)
           }}</strong>
         </div>

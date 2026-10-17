@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible problem in the Motor-Oil-EG application.
+description: Report a reproducible problem in the ZaytStore application.
 title: '[Bug]: '
 labels:
   - bug
@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve Motor-Oil-EG. Please avoid including personal data or secrets.
+        Thanks for helping improve ZaytStore. Please avoid including personal data or secrets.
   - type: textarea
     id: problem
     attributes:

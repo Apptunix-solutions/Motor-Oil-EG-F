@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { Download, WifiOff, X } from 'lucide-vue-next'
 import { onMounted, onUnmounted, ref } from 'vue'
 
@@ -42,27 +42,27 @@ onUnmounted(() => {
 <template>
   <div
     v-if="!dismissed && (offline || deferredPrompt)"
-    class="fixed bottom-24 left-4 right-4 z-50 mx-auto flex max-w-md items-center gap-3 rounded-2xl border border-white/10 bg-[#1B1F26] p-3 shadow-2xl sm:bottom-6 sm:left-auto sm:right-6"
+    class="fixed bottom-24 left-4 right-4 z-50 mx-auto flex max-w-md items-center gap-3 rounded-2xl border border-[var(--line)] bg-[var(--elevated)] p-3 shadow-2xl sm:bottom-6 sm:left-auto sm:right-6"
   >
     <span
       class="grid h-9 w-9 shrink-0 place-items-center rounded-xl"
-      :class="offline ? 'bg-[#F5A710]/10 text-[#F5A710]' : 'bg-[#58D5E6]/10 text-[#58D5E6]'"
+      :class="offline ? 'bg-[#E8A020]/10 text-[#E8A020]' : 'bg-[#0F3D20]/40 text-[#E8A020]'"
       ><WifiOff v-if="offline" :size="17" /><Download v-else :size="17"
     /></span>
-    <p class="flex-1 text-xs leading-relaxed text-white">
+    <p class="flex-1 text-xs leading-relaxed text-[var(--text)]">
       {{
         offline
-          ? 'You’re offline. Your saved garage is still available.'
-          : 'Take Motor-Oil-EG with you. Install the app for a faster garage.'
+          ? 'أنت غير متصل بالإنترنت. بيانات سيارتك المحفوظة ما زالت متاحة.'
+          : 'خذ ZaytStore معك. ثبّت التطبيق لتجربة أسرع وأداء أفضل.'
       }}
     </p>
     <button
       v-if="deferredPrompt && !offline"
-      class="rounded-lg bg-[#F5A710] px-3 py-2 text-[10px] font-bold text-[#0B0D10]"
+      class="rounded-lg bg-[#E8A020] px-3 py-2 text-[12px] font-bold text-[#071F0D] transition hover:bg-[#F5C060]"
       @click="install"
     >
-      Install</button
-    ><button aria-label="Dismiss status" class="text-[#8E96A3]" @click="dismissed = true">
+      تثبيت</button
+    ><button aria-label="إغلاق الإشعار" class="text-[var(--muted)]" @click="dismissed = true">
       <X :size="15" />
     </button>
   </div>

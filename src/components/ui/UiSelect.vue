@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import {
   SelectContent,
   SelectItem,
@@ -43,7 +43,7 @@ const emit = defineEmits<{
       class="flex items-center justify-between outline-none transition disabled:cursor-not-allowed disabled:opacity-50"
       :class="
         props.class ||
-        'h-[42px] w-full rounded-[10px] border border-white/10 bg-[#0f1216] px-3 text-[12px] text-[#f4f5f7] focus:border-[#f5a710] focus:ring-1 focus:ring-[#f5a710]/50'
+        'h-[42px] w-full rounded-[10px] border border-[var(--line)] bg-[var(--input)] px-3 text-[12px] text-[var(--text)] focus:border-[#f5a710] focus:ring-1 focus:ring-[#f5a710]/50'
       "
     >
       <SelectValue :placeholder="placeholder" />
@@ -52,7 +52,7 @@ const emit = defineEmits<{
 
     <SelectPortal>
       <SelectContent
-        class="z-50 relative max-h-96 min-w-[8rem] overflow-hidden rounded-xl border border-white/10 bg-[#14171C] text-[#f4f5f7] shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+        class="z-50 relative max-h-96 min-w-[8rem] overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--panel)] text-[var(--text)] shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
         position="popper"
         :side-offset="4"
       >

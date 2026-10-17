@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ZaytStore favicon">
+  <defs>
+    <linearGradient id="bgF" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#15542F"/>
+      <stop offset="100%" stop-color="#0F3D20"/>
+    </linearGradient>
+    <linearGradient id="dropF" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#FFD659"/>
+      <stop offset="50%" stop-color="#E8A020"/>
+      <stop offset="100%" stop-color="#B87500"/>
+    </linearGradient>
+    <radialGradient id="sheenF" cx="38%" cy="28%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background tile -->
+  <rect width="64" height="64" rx="14" fill="url(#bgF)"/>
+
+  <!-- Oil drop body -->
+  <path d="M32 8 C32 8,10 32.5,10 44 C10 56,20.2 62,32 62 C43.8 62,54 56,54 44 C54 32.5,32 8,32 8 Z"
+        fill="url(#dropF)"/>
+
+  <!-- Sheen -->
+  <path d="M32 8 C32 8,10 32.5,10 44 C10 56,20.2 62,32 62 C43.8 62,54 56,54 44 C54 32.5,32 8,32 8 Z"
+        fill="url(#sheenF)"/>
+
+  <!-- Highlight -->
+  <path d="M18 43 C17 37,21 30,27 24"
+        stroke="white" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.4"/>
+</svg>

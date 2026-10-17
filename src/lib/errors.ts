@@ -25,11 +25,10 @@ export function normalizeError(error: unknown, context = 'application'): AppErro
       return {
         kind: candidate.kind,
         status: candidate.status ?? 500,
-        code: candidate.code ?? 'TRQ-500',
-        title: candidate.title ?? 'Something needs attention',
+        code: candidate.code ?? 'ZYT-500',
+        title: candidate.title ?? 'هناك شيء يحتاج انتباهاً',
         message:
-          candidate.message ??
-          'We could not complete that request. Try again or return to the home page.',
+          candidate.message ?? 'تعذّر إتمام الطلب. حاول مرة أخرى أو ارجع إلى الصفحة الرئيسية.',
       }
     }
   }
@@ -39,16 +38,16 @@ export function normalizeError(error: unknown, context = 'application'): AppErro
     ? {
         kind: 'network',
         status: 503,
-        code: 'TRQ-503',
-        title: 'Connection interrupted',
-        message: 'We could not reach the garage right now. Check your connection and try again.',
+        code: 'ZYT-503',
+        title: 'انقطعت الاتصال',
+        message: 'تعذّر الوصول إلى ZaytStore الآن. تحقق من اتصالك بالإنترنت وحاول مجدداً.',
       }
     : {
         kind: 'unexpected',
         status: 500,
-        code: 'TRQ-500',
-        title: 'Something needs attention',
-        message: `Motor-Oil-EG hit an unexpected problem in ${context}. Your saved garage is safe; try again or head home.`,
+        code: 'ZYT-500',
+        title: 'هناك شيء يحتاج انتباهاً',
+        message: `حدثت مشكلة غير متوقعة في ZaytStore (${context}). بياناتك محفوظة — حاول مرة أخرى أو ارجع للرئيسية.`,
       }
 }
 
@@ -56,17 +55,16 @@ export function createNotFoundError(): AppError {
   return {
     kind: 'not-found',
     status: 404,
-    code: 'TRQ-404',
-    title: 'Route not found',
-    message:
-      'That road does not exist in this garage. Let’s get you back to the fluids and fitment tools.',
+    code: 'ZYT-404',
+    title: 'الصفحة غير موجودة',
+    message: 'هذا الرابط غير موجود في ZaytStore. تصفّح المنتجات أو المتاجر من الصفحة الرئيسية.',
   }
 }
 
 export function reportError(error: unknown, context?: string): AppError {
   const normalized = normalizeError(error, context)
   currentError.value = normalized
-  console.error(`[Motor-Oil-EG] ${context ?? 'application'} error`, error)
+  console.error(`[ZaytStore] ${context ?? 'application'} error`, error)
   return normalized
 }
 

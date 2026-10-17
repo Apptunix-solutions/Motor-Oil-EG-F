@@ -1,9 +1,9 @@
 services:
-  motor-oil-eg:
+  zaytstore:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    image: motor-oil-eg-web:local
+    image: zaytstore-web:local
     ports:
       - '8080:8080'
     read_only: true

@@ -9,10 +9,10 @@ import { checkoutSchema } from '../../lib/validators'
 
 const validCheckout = {
   email: 'driver@example.com',
-  phone: '010 1234 5678',
-  name: 'Omar Hassan',
-  street: '14 Grand Avenue',
-  city: 'Cairo',
+  phone: '0912 345 678',
+  name: 'عمر حسن',
+  street: 'شارع الثورة 14',
+  city: 'دمشق',
   postalCode: '11511',
 }
 
@@ -28,8 +28,8 @@ describe('ProductCard', () => {
       global: { stubs: { RouterLink: { template: '<a><slot /></a>' } } },
     })
 
-    expect(wrapper.text()).toContain('EDGE Titanium 5W-30')
-    await wrapper.get('button[aria-label="Add EDGE Titanium 5W-30 to cart"]').trigger('click')
+    expect(wrapper.text()).toContain('10W40 4L')
+    await wrapper.get('button[aria-label="أضف 10W40 4L إلى السلة"]').trigger('click')
     expect(useCartStore().count).toBe(1)
   })
 })
@@ -40,8 +40,8 @@ describe('Cart store', () => {
     cart.add(products[0])
     cart.add(products[0])
     expect(cart.count).toBe(2)
-    expect(cart.subtotal).toBe(85.8)
-    expect(JSON.parse(localStorage.getItem('motor-oil-eg-cart') ?? '{}')[products[0].id]).toBe(2)
+    expect(cart.subtotal).toBe(30)
+    expect(JSON.parse(localStorage.getItem('zaytstore-cart') ?? '{}')[products[0].id]).toBe(2)
   })
 
   it('caps quantity per item', () => {
@@ -51,12 +51,12 @@ describe('Cart store', () => {
   })
 
   it('discards corrupt or tampered storage instead of crashing', () => {
-    localStorage.setItem('motor-oil-eg-cart', '{not json')
+    localStorage.setItem('zaytstore-cart', '{not json')
     expect(useCartStore().count).toBe(0)
 
     setActivePinia(createPinia())
     localStorage.setItem(
-      'motor-oil-eg-cart',
+      'zaytstore-cart',
       JSON.stringify({ [products[0].id]: -5, 'unknown-product': 3 }),
     )
     expect(useCartStore().count).toBe(0)
@@ -64,7 +64,7 @@ describe('Cart store', () => {
 
   it('drops unknown product ids but keeps valid ones', () => {
     localStorage.setItem(
-      'motor-oil-eg-cart',
+      'zaytstore-cart',
       JSON.stringify({ [products[0].id]: 2, 'unknown-product': 3 }),
     )
     expect(useCartStore().count).toBe(2)
@@ -85,7 +85,7 @@ describe('Orders store', () => {
 
 describe('Checkout validation', () => {
   it('accepts valid details and normalises the phone number', () => {
-    expect(checkoutSchema.parse(validCheckout).phone).toBe('01012345678')
+    expect(checkoutSchema.parse(validCheckout).phone).toBe('0912345678')
   })
 
   it('rejects incomplete or malformed details', () => {

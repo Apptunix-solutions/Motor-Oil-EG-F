@@ -7,14 +7,17 @@ export default {
         ink: '#0B0D10',
         panel: '#14171C',
         elevated: '#1B1F26',
-        orange: '#F5A710',
-        cyan: '#58D5E6',
+        /* ذهبي ZaytStore */
+        orange: '#E8A020',
+        /* أخضر ZaytStore العميق */
+        green: '#0F3D20',
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        /* خط القاهرة يدعم العربية بالكامل — نفس خط الموقع الحي */
+        sans: ['Cairo', 'Segoe UI', 'Tahoma', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        glow: '0 0 40px rgba(245, 167, 16, 0.18)',
+        glow: '0 0 40px rgba(232, 160, 32, 0.18)',
       },
     },
   },

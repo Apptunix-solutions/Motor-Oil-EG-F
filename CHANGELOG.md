@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Motor-Oil-EG are documented in this file.
+All notable changes to ZaytStore (formerly Motor-Oil-EG) are documented in this file.
 
 Versions are created automatically by the release workflow using
 [`github-tag-action`](https://github.com/mathieudutour/github-tag-action). See

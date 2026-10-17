@@ -1,24 +1,186 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <!-- Primary favicon: oil-drop SVG (all modern browsers: Chrome, Firefox, Edge, Safari) -->
-    <link rel="icon" type="image/svg+xml" href="/motor-oil-eg-favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/zaytstore-favicon.svg" />
     <!-- Apple Touch Icon (iOS home screen add-to-homescreen) -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/motor-oil-eg-icon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/zaytstore-icon.svg" />
     <!-- PWA manifest (picks up icons from vite.config.ts) -->
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#0B0D10" />
+    <meta name="theme-color" content="#0F3D20" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ZaytStore" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="ZaytStore" />
+    <meta name="creator" content="ZaytStore" />
+    <meta name="publisher" content="ZaytStore" />
     <meta
       name="description"
-      content="Motor-Oil-EG — Egypt's premier online marketplace for genuine motor oils, engine fluids, filters, and car care products. Shop Castrol, Mobil, Shell, Motul and more."
+      content="تسوق أفضل زيوت السيارات والمصافي وقطع الغيار من تجار موثوقين في سوريا. أسعار شفافة، توصيل موثوق، جودة مضمونة."
     />
-    <title>Motor-Oil-EG — Egypt's Premium Oil Marketplace</title>
+    <meta
+      name="keywords"
+      content="زيوت سيارات,زيوت محركات,مصافي زيت,قطع غيار,سوريا,ZaytStore,زيت ستور"
+    />
+    <link rel="canonical" href="https://zaytstores.com" />
+    <meta name="google-site-verification" content="Akua8DH_6O4hEuAxA_UHA2hq8e5vJqSOFJ466Q6nFIY" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:title" content="ZaytStore — المتجر الأول لزيوت السيارات في سوريا" />
+    <meta
+      property="og:description"
+      content="تسوق أفضل زيوت السيارات والمصافي وقطع الغيار من تجار موثوقين في سوريا."
+    />
+    <meta property="og:url" content="https://zaytstores.com" />
+    <meta property="og:site_name" content="ZaytStore" />
+    <meta property="og:locale" content="ar_SY" />
+    <meta property="og:image" content="https://zaytstores.com/icons/icon-512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="ZaytStore" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="ZaytStore — زيوت السيارات في سوريا" />
+    <meta
+      name="twitter:description"
+      content="تسوق أفضل زيوت السيارات والمصافي وقطع الغيار من تجار موثوقين."
+    />
+    <meta name="twitter:image" content="https://zaytstores.com/icons/icon-512.png" />
+
+    <title>ZaytStore — المتجر الأول لزيوت السيارات في سوريا</title>
+
+    <!-- ═══ شاشة التحميل الأولى (Shimmer) — تظهر قبل تحميل JS فلا يوجد وميض فارغ ═══ -->
+    <style>
+      #zayt-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 22px;
+        background: radial-gradient(120% 90% at 50% 0%, #0c2e16 0%, #071f0d 55%, #050d07 100%);
+        transition:
+          opacity 520ms ease,
+          visibility 520ms ease;
+        font-family: 'Cairo', 'Segoe UI', Tahoma, ui-sans-serif, system-ui, sans-serif;
+      }
+      #zayt-splash.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #zayt-splash .zs-drop {
+        width: 74px;
+        height: 74px;
+        animation: zsFloat 3s ease-in-out infinite;
+        filter: drop-shadow(0 12px 30px rgba(232, 160, 32, 0.4));
+      }
+      @keyframes zsFloat {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-3deg);
+        }
+        50% {
+          transform: translateY(-9px) rotate(3deg);
+        }
+      }
+      #zayt-splash .zs-word {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        color: #e8a020;
+      }
+      #zayt-splash .zs-word span {
+        color: #f4f5f7;
+      }
+      /* الشريط اللامع: انزلاق لمعة عبر المسار */
+      #zayt-splash .zs-track {
+        position: relative;
+        width: 176px;
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+      }
+      #zayt-splash .zs-bar {
+        position: absolute;
+        inset: 0;
+        width: 45%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, transparent, #e8a020 45%, #ffd659 55%, transparent);
+        animation: zsSweep 1.25s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+      @keyframes zsSweep {
+        0% {
+          transform: translateX(-120%);
+        }
+        100% {
+          transform: translateX(340%);
+        }
+      }
+      #zayt-splash .zs-hint {
+        font-size: 13px;
+        color: rgba(244, 245, 247, 0.55);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #zayt-splash .zs-drop {
+          animation: none;
+        }
+        #zayt-splash .zs-bar {
+          animation-duration: 2.4s;
+        }
+      }
+      /* إطار أمان: تختفي الشاشة حتى لو تعذّر تحميل التطبيق */
+      html.zs-failed #zayt-splash {
+        display: none;
+      }
+    </style>
+    <script>
+      // بعد 9 ثوانٍ كحدّ أقصى، أخفِ شاشة التحميل حتى لا يبقى المستخدم عالقاً
+      window.__zsSplashTimer = window.setTimeout(function () {
+        var el = document.getElementById('zayt-splash')
+        if (el) el.classList.add('is-hidden')
+        document.documentElement.classList.add('zs-failed')
+      }, 9000)
+    </script>
   </head>
   <body>
+    <!-- شاشة الوميض الأولى: تُرسم فوراً وتختفي عند جهوز التطبيق -->
+    <div id="zayt-splash" role="status" aria-live="polite" aria-label="جارٍ تحميل ZaytStore">
+      <svg class="zs-drop" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="16" fill="#0F3D20" />
+        <path
+          d="M32 8 C32 8,13 29,13 40 C13 50.5,21.5 56,32 56 C42.5 56,51 50.5,51 40 C51 29,32 8,32 8 Z"
+          fill="url(#zsGrad)"
+        />
+        <path
+          d="M21 39 C20.4 34,23.6 28.4,28.4 23.6"
+          stroke="#fff"
+          stroke-width="3.2"
+          stroke-linecap="round"
+          fill="none"
+          opacity="0.4"
+        />
+        <defs>
+          <linearGradient id="zsGrad" x1="0" y1="0" x2="0.5" y2="1">
+            <stop offset="0%" stop-color="#FFD659" />
+            <stop offset="50%" stop-color="#E8A020" />
+            <stop offset="100%" stop-color="#B87500" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="zs-word">ZAYT<span>STORE</span></div>
+      <div class="zs-track"><div class="zs-bar"></div></div>
+      <div class="zs-hint">جارٍ تحميل الزيوت…</div>
+    </div>
+
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

@@ -6,7 +6,7 @@ import type { Order } from '@/types/order'
 import type { CartLine, OrderAddress } from '@/types/cart'
 import type { Product } from '@/types/product'
 
-const STORAGE_KEY = 'motor-oil-eg-orders'
+const STORAGE_KEY = 'zaytstore-orders'
 
 const productSchema = z.custom<Product>(
   (value) =>
@@ -35,7 +35,7 @@ const ordersSchema = z.array(
 )
 
 function createOrderId() {
-  return `MOEG-${crypto.randomUUID().replace(/-/g, '').slice(0, 10).toUpperCase()}`
+  return `ZYT-${crypto.randomUUID().replace(/-/g, '').slice(0, 10).toUpperCase()}`
 }
 
 export const useOrdersStore = defineStore('orders', () => {

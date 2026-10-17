@@ -1,3 +1,8 @@
+/**
+ * تنسيق السعر كما يظهر على zaytstores.com: 15 $ / 81 $
+ * (الدولار الأمريكي هو عملة العرض المعتمدة على الموقع).
+ */
 export function formatPrice(value: number) {
-  return new Intl.NumberFormat('en-EG', { style: 'currency', currency: 'EGP' }).format(value)
+  const amount = Number.isInteger(value) ? String(value) : value.toFixed(2)
+  return `${amount} $`
 }

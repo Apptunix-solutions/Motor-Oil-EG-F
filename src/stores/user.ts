@@ -5,7 +5,7 @@ import { readStored, writeStored } from '@/lib/storage'
 import { vehicleSchema } from '@/stores/vehicle'
 import type { UserPreferences } from '@/types/user'
 
-const STORAGE_KEY = 'motor-oil-eg-preferences'
+const STORAGE_KEY = 'zaytstore-preferences'
 
 const defaultPreferences: UserPreferences = {
   name: '',

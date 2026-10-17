@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+/* خط القاهرة — نفس خط الموقع الحي zaytstores.com، مصمَّم خصيصاً للعربية (سوريا) */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
 @import 'tailwindcss';
 @config '../../tailwind.config.js';
 @import './base.css';
@@ -7,7 +8,10 @@
   --color-ink: #0b0d10;
   --color-panel: #14171c;
   --color-elevated: #1b1f26;
-  --color-orange: #f5a710;
+  /* ذهبي ZaytStore */
+  --color-orange: #e8a020;
+  /* أخضر ZaytStore العميق */
+  --color-green: #0f3d20;
   --color-cyan: #58d5e6;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Cairo', 'Segoe UI', Tahoma, ui-sans-serif, system-ui, sans-serif;
 }

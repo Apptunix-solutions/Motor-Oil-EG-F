@@ -1,12 +1,12 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 withDefaults(defineProps<{ as?: string; muted?: boolean }>(), { as: 'div', muted: false })
 </script>
 
 <template>
   <component
     :is="as"
-    class="rounded-2xl border border-white/[0.08] bg-[#14171C] text-[#F4F5F7] shadow-sm"
-    :class="muted ? 'bg-white/[0.03]' : ''"
+    class="rounded-2xl border border-[var(--line)] bg-[var(--panel)] text-[var(--text)] shadow-sm"
+    :class="muted ? 'bg-[var(--glass)]' : ''"
     ><slot
   /></component>
 </template>

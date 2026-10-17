@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { z } from 'zod'
 import { readStored, writeStored } from '@/lib/storage'
 
-const STORAGE_KEY = 'motor-oil-eg-wishlist'
+const STORAGE_KEY = 'zaytstore-wishlist'
 
 export const useWishlistStore = defineStore('wishlist', () => {
   const ids = ref<string[]>(readStored(STORAGE_KEY, z.array(z.string()).max(500), []))
