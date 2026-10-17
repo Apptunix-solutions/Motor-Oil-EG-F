@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { formatPrice } from '@/lib/utils'
 import { computed, ref } from 'vue'
 import {
@@ -91,10 +91,10 @@ function toggleSaved() {
       class="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]"
     >
       <RouterLink to="/" class="transition hover:text-[var(--text)]">الرئيسية</RouterLink>
-      <ChevronLeft :size="13" />
+      <ChevronLeft :size="13" class="rtl:rotate-0 ltr:rotate-180" />
       <RouterLink to="/products" class="transition hover:text-[var(--text)]">المنتجات</RouterLink>
       <template v-if="product">
-        <ChevronLeft :size="13" />
+        <ChevronLeft :size="13" class="rtl:rotate-0 ltr:rotate-180" />
         <span class="text-[#E8A020]">{{ product.name }}</span>
       </template>
     </nav>
@@ -107,17 +107,17 @@ function toggleSaved() {
           <img
             :src="product.images[selectedImage]"
             :alt="product.name"
-            class="h-full w-full object-contain p-6 opacity-90"
+            class="h-full w-full object-cover transition-transform duration-500 ease-out hover:scale-105"
           />
           <div
-            class="absolute inset-0 bg-gradient-to-t from-[#101318] via-transparent to-transparent"
+            class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/50 via-transparent to-transparent"
           ></div>
           <span
-            class="absolute right-5 top-5 rounded-full bg-[#E8A020] px-3 py-1.5 text-[12px] font-bold text-[#071F0D]"
+            class="absolute start-5 top-5 rounded-full bg-[#E8A020] px-3.5 py-1.5 text-[12px] font-bold text-[#071F0D] shadow-md"
             >{{ product.brand }}</span
           >
           <span
-            class="absolute bottom-5 right-5 rounded-lg bg-[var(--glass-strong)] px-3 py-2 text-sm font-bold backdrop-blur"
+            class="absolute bottom-5 start-5 rounded-lg bg-[var(--glass-strong)] px-3 py-2 text-sm font-bold backdrop-blur border border-white/10 text-[var(--text)] shadow-md"
             >{{ product.viscosity }} · {{ product.volume }}</span
           >
         </div>
@@ -125,8 +125,12 @@ function toggleSaved() {
           <button
             v-for="(image, index) in product.images"
             :key="image"
-            class="aspect-[1.5] overflow-hidden rounded-xl border-2 bg-[var(--elevated)]"
-            :class="selectedImage === index ? 'border-[#E8A020]' : 'border-transparent opacity-60'"
+            class="aspect-[1.5] overflow-hidden rounded-xl border-2 bg-[var(--elevated)] transition"
+            :class="
+              selectedImage === index
+                ? 'border-[#E8A020] shadow-md shadow-[#E8A020]/15'
+                : 'border-[var(--line)] opacity-60 hover:opacity-100'
+            "
             :aria-pressed="selectedImage === index"
             :aria-label="`صورة ${index + 1}`"
             @click="selectedImage = index"
@@ -134,7 +138,7 @@ function toggleSaved() {
             <img
               :src="image"
               :alt="`${product.name} صورة ${index + 1}`"
-              class="h-full w-full object-contain"
+              class="h-full w-full object-cover"
             />
           </button>
         </div>
@@ -333,23 +337,31 @@ function toggleSaved() {
               .slice(0, 4)"
             :key="related.id"
             :to="`/product/${related.slug}`"
-            class="flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--bg)] p-3 transition hover:border-[#E8A020]/40"
+            class="group flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--bg)] p-3 transition hover:border-[#E8A020]/40 hover:bg-[var(--elevated)]"
           >
-            <img
-              :src="related.image"
-              :alt="related.name"
-              loading="lazy"
-              class="h-12 w-12 shrink-0 rounded-lg object-contain"
-            />
-            <span class="min-w-0">
-              <span class="block truncate text-[12px] font-semibold text-[var(--text)]">{{
-                related.name
-              }}</span>
+            <div
+              class="h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--elevated)] p-1 flex items-center justify-center shadow-sm"
+            >
+              <img
+                :src="related.image"
+                :alt="related.name"
+                loading="lazy"
+                class="h-full w-full rounded-lg object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+            <span class="min-w-0 flex-1">
+              <span
+                class="block truncate text-[12px] font-semibold text-[var(--text)] transition-colors group-hover:text-[#E8A020]"
+                >{{ related.name }}</span
+              >
               <span class="mt-1 block text-[12px] font-bold text-[#E8A020]">{{
                 formatPrice(related.price)
               }}</span>
             </span>
-            <ArrowRight :size="14" class="mr-auto shrink-0 text-[var(--muted)]" />
+            <ArrowRight
+              :size="14"
+              class="ms-auto shrink-0 text-[var(--muted)] transition-all group-hover:text-[#E8A020] rtl:rotate-180 rtl:group-hover:-translate-x-0.5 ltr:rotate-0 ltr:group-hover:translate-x-0.5"
+            />
           </RouterLink>
         </div>
       </div>
