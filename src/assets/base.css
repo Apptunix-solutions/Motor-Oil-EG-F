@@ -81,51 +81,66 @@ button {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   Scrollbar — thin 6px, no arrows (▲▼), matches 7-motors style
-   ═══════════════════════════════════════════════════════════════════
-   Firefox / modern browsers  → scrollbar-width + scrollbar-color on html
-   Chrome / Edge / Safari     → *::-webkit-scrollbar-* pseudo-elements
-   The bare ::-webkit-scrollbar (without a * prefix) is NOT valid CSS
-   and is ignored by all browsers — removed to avoid dead rules.
+   Scrollbar — thin 6px, zero arrows (▲▼◄►), matches 7-motors style
+   Firefox  → scrollbar-width + scrollbar-color set on html (below)
+   Chrome / Edge / Safari → *::-webkit-scrollbar-* pseudo-elements
    ─────────────────────────────────────────────────────────────────── */
 
-/* Firefox — set once on the root; inherited by all children */
+/* Firefox: thin track, no arrows */
 html {
   scrollbar-width: thin;
   scrollbar-color: var(--scroll-thumb) transparent;
 }
 
-/* WebKit: size */
+/* WebKit: scrollbar size (6 px thin strip) */
+::-webkit-scrollbar,
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-/* WebKit: track */
+/* WebKit: transparent track */
+::-webkit-scrollbar-track,
 *::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* WebKit: thumb */
+/* WebKit: styled thumb */
+::-webkit-scrollbar-thumb,
 *::-webkit-scrollbar-thumb {
   background: var(--scroll-thumb);
   border-radius: 9999px;
   transition: background-color 0.2s;
 }
+::-webkit-scrollbar-thumb:hover,
 *::-webkit-scrollbar-thumb:hover {
   background: var(--scroll-thumb-hover);
 }
 
-/* WebKit: hide ALL arrow buttons (▲▼◄►) in every direction/position.
-   A single *::-webkit-scrollbar-button rule with display:none is enough —
-   the browser applies it to all button sub-types automatically. */
-*::-webkit-scrollbar-button {
+/* WebKit: hide arrow buttons (▲▼◄►).
+   Chrome/Edge require BOTH the bare selector (document-root scrollbar)
+   AND the *:: selector (all child-element scrollbars).
+   The :single-button variants are needed in some Chrome versions. */
+::-webkit-scrollbar-button,
+*::-webkit-scrollbar-button,
+::-webkit-scrollbar-button:single-button,
+*::-webkit-scrollbar-button:single-button,
+::-webkit-scrollbar-button:single-button:vertical:decrement,
+*::-webkit-scrollbar-button:single-button:vertical:decrement,
+::-webkit-scrollbar-button:single-button:vertical:increment,
+*::-webkit-scrollbar-button:single-button:vertical:increment,
+::-webkit-scrollbar-button:single-button:horizontal:decrement,
+*::-webkit-scrollbar-button:single-button:horizontal:decrement,
+::-webkit-scrollbar-button:single-button:horizontal:increment,
+*::-webkit-scrollbar-button:single-button:horizontal:increment {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
+  background: transparent !important;
 }
 
-/* WebKit: hide the bottom-right corner square */
+/* WebKit: hide bottom-right corner square */
+::-webkit-scrollbar-corner,
 *::-webkit-scrollbar-corner {
   background: transparent;
 }
