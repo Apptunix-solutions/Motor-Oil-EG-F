@@ -340,13 +340,13 @@ function toggleSaved() {
             class="group flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--bg)] p-3 transition hover:border-[#E8A020]/40 hover:bg-[var(--elevated)]"
           >
             <div
-              class="h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--elevated)] p-1 flex items-center justify-center shadow-sm"
+              class="h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--elevated)] shadow-sm"
             >
               <img
                 :src="related.image"
                 :alt="related.name"
                 loading="lazy"
-                class="h-full w-full rounded-lg object-contain transition-transform duration-300 group-hover:scale-105"
+                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
             <span class="min-w-0 flex-1">
