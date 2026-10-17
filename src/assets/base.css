@@ -153,6 +153,9 @@ button {
 }
 
 /* ═══ زر تبديل السمة: مورف الأيقونة (☀ ↔ ☾) ═══════════════════════ */
+/* ملاحظة: لا نضع view-transition-name هنا (ثابت). في الهيدر زران للتبديل
+   (سطح المكتب + الجوال) وسيتشاركان الاسم نفسه، وهو ممنوع في View Transitions
+   فيتخطّى الانتقال. لذلك يُضبط الاسم ديناميكياً على الزر المضغوط فقط. */
 .theme-icon {
   transition:
     opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
@@ -196,7 +199,7 @@ button {
 /* ③ اللقطة الجديدة تتوسع ككشف دائري يبدأ من إحداثيات مركز الزر */
 ::view-transition-new(root) {
   z-index: 99999;
-  animation: theme-reveal-circle 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: theme-reveal-circle 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes theme-reveal-circle {
@@ -208,10 +211,39 @@ button {
   }
 }
 
-/* ④ احترام تفضيل تقليل الحركة */
+/* ④ الزر بطبقة مستقلة فوق الكشف: مورف دوران ناعم للأيقونة */
+::view-transition-group(theme-toggle),
+::view-transition-old(theme-toggle),
+::view-transition-new(theme-toggle) {
+  z-index: 1000000;
+}
+::view-transition-old(theme-toggle) {
+  animation: theme-toggle-out 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+::view-transition-new(theme-toggle) {
+  animation: theme-toggle-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes theme-toggle-out {
+  to {
+    opacity: 0;
+    transform: rotate(-100deg) scale(0.5);
+  }
+}
+@keyframes theme-toggle-in {
+  from {
+    opacity: 0;
+    transform: rotate(100deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* ⑤ احترام تفضيل تقليل الحركة: نعرض السمة مباشرة بدون أي حركة */
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
     animation: none !important;
   }
 }

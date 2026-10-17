@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
+import { computed, ref } from 'vue'
 import {
   CarFront,
   Menu,
@@ -51,11 +51,28 @@ function toggleTheme(event: MouseEvent) {
     root.style.setProperty('--theme-toggle-y', `${y.toFixed(2)}%`)
   }
 
-  if (typeof document.startViewTransition === 'function') {
-    void document.startViewTransition(async () => {
+  // احترام تفضيل تقليل الحركة: نبدّل مباشرة بدون الكشف الدائري.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (!reduceMotion && typeof document.startViewTransition === 'function') {
+    // في الهيدر زرّان للتبديل (سطح المكتب + الجوال). نعطي الاسم للزر المضغوط
+    // وحده لحظة الانتقال حتى لا يتشاركا اسماً واحداً (ممنوع) فيتخطّى الانتقال،
+    // ثم نزيله بعد الانتهاء ليبقى كل شيء كما هو.
+    button?.style.setProperty('view-transition-name', 'theme-toggle')
+
+    // الـ callback متزامن عمداً: تغيير data-theme يتم فوراً داخل ui.toggle()،
+    // فلا تأخير (latency) بين الضغطة وبدء الكشف — وهذا سرّ سلاسة الحركة.
+    const transition = document.startViewTransition(() => {
       ui.toggle()
-      await nextTick()
     })
+
+    transition.finished
+      .catch(() => {
+        // الانتقال قد يتخطّى في بعض الحالات؛ لا نعترض.
+      })
+      .finally(() => {
+        button?.style.removeProperty('view-transition-name')
+      })
   } else {
     ui.toggle()
   }
@@ -80,6 +97,16 @@ function isNavActive(item?: NavItem): boolean {
   if (item.activeWhen) return item.activeWhen()
   if (item.name === 'products') return route.name === 'products' || route.name === 'product'
   return route.name === item.name
+}
+
+function handleMobileLogin() {
+  mobileMenuOpen.value = false
+  ui.openAuth('login')
+}
+
+function handleMobileRegister() {
+  mobileMenuOpen.value = false
+  ui.openAuth('register')
 }
 </script>
 
@@ -396,10 +423,7 @@ function isNavActive(item?: NavItem): boolean {
                   v-if="!auth.isLoggedIn"
                   type="button"
                   class="rounded-xl px-3 py-2.5 text-start text-xs font-bold text-[var(--soft)] hover:bg-[var(--glass)] transition-colors"
-                  @click="
-                    mobileMenuOpen = false
-                    ui.openAuth('login')
-                  "
+                  @click="handleMobileLogin"
                 >
                   {{ locale.t('login') }}
                 </button>
@@ -415,10 +439,7 @@ function isNavActive(item?: NavItem): boolean {
                 <button
                   type="button"
                   class="rounded-xl bg-[#E8A020]/15 px-3 py-2.5 text-start text-xs font-bold text-[#E8A020] hover:bg-[#E8A020]/25 transition-colors"
-                  @click="
-                    mobileMenuOpen = false
-                    ui.openAuth('register')
-                  "
+                  @click="handleMobileRegister"
                 >
                   {{ locale.t('openStore') }}
                 </button>

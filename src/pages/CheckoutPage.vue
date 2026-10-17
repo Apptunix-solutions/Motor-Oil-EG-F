@@ -8,9 +8,12 @@ import { formatPrice } from '@/lib/utils'
 import { reportError } from '@/lib/errors'
 import { useCartStore } from '@/stores/cart'
 import { useOrdersStore } from '@/stores/orders'
+import { useAuthStore } from '@/stores/auth'
+import GovernorateSelect from '@/components/ui/GovernorateSelect.vue'
 
 const cart = useCartStore()
 const orders = useOrdersStore()
+const auth = useAuthStore()
 const submitted = ref(false)
 const submitting = ref(false)
 const orderId = ref('')
@@ -22,26 +25,9 @@ const form = reactive<CheckoutForm>({
   phone: '',
   name: '',
   street: '',
-  city: '',
+  city: auth.selectedLocation || '',
   postalCode: '',
 })
-
-const governorates = [
-  'دمشق',
-  'ريف دمشق',
-  'حلب',
-  'حمص',
-  'حماة',
-  'اللاذقية',
-  'طرطوس',
-  'إدلب',
-  'الرقة',
-  'الحسكة',
-  'دير الزور',
-  'درعا',
-  'السويداء',
-  'القنيطرة',
-]
 
 const fields: {
   key: CheckoutField
@@ -224,7 +210,16 @@ function goToGovernorate() {
                   class="mb-2 block text-[12px] font-semibold text-[var(--soft)]"
                   >{{ field.label }}</label
                 >
+                <GovernorateSelect
+                  v-if="field.key === 'city'"
+                  :id="`checkout-${field.key}`"
+                  v-model="form.city"
+                  :has-error="Boolean(fieldErrors.city)"
+                  :placeholder="field.placeholder"
+                  @update:model-value="delete fieldErrors.city"
+                />
                 <input
+                  v-else
                   :id="`checkout-${field.key}`"
                   v-model="form[field.key]"
                   :name="field.key"
@@ -232,7 +227,6 @@ function goToGovernorate() {
                   :inputmode="field.inputmode"
                   :autocomplete="field.autocomplete"
                   :placeholder="field.placeholder"
-                  :list="field.key === 'city' ? 'governorates' : undefined"
                   :aria-invalid="fieldErrors[field.key] ? 'true' : undefined"
                   :aria-describedby="
                     fieldErrors[field.key] ? `checkout-${field.key}-error` : undefined
@@ -250,9 +244,6 @@ function goToGovernorate() {
                 </p>
               </div>
             </div>
-            <datalist id="governorates">
-              <option v-for="governorate in governorates" :key="governorate" :value="governorate" />
-            </datalist>
           </fieldset>
           <div class="rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-5 sm:p-7">
             <div class="flex items-center gap-3">

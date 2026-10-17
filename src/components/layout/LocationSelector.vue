@@ -4,26 +4,13 @@ import { Check, ChevronDown, MapPin, Phone } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { toast } from '@/lib/toast'
 
+import { syrianGovernorates } from '@/data/governorates'
+
 const auth = useAuthStore()
 const isOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 
-const cities = [
-  'دمشق',
-  'ريف دمشق',
-  'حلب',
-  'حمص',
-  'حماة',
-  'اللاذقية',
-  'طرطوس',
-  'السويداء',
-  'درعا',
-  'القنيطرة',
-  'دير الزور',
-  'الحسكة',
-  'الرقة',
-  'إدلب',
-]
+const cities = syrianGovernorates.map((g) => g.nameAr)
 
 function selectCity(city: string) {
   auth.setLocation(city)

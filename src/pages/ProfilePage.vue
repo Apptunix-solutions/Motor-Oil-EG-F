@@ -26,6 +26,7 @@ import { useNotificationsStore } from '@/stores/notifications'
 import { useVehicleStore } from '@/stores/vehicle'
 import { useWishlistStore } from '@/stores/wishlist'
 import { toast } from '@/lib/toast'
+import GovernorateSelect from '@/components/ui/GovernorateSelect.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -758,10 +759,10 @@ function handleLogout() {
             <label class="mb-1 block text-xs font-bold text-[var(--soft)] text-start">
               {{ locale.isArabic ? 'المحافظة / المدينة' : 'City / Governorate' }}
             </label>
-            <input
+            <GovernorateSelect
+              id="profile-city"
               v-model="formCity"
-              type="text"
-              class="h-11 w-full rounded-xl border border-[var(--line)] bg-[var(--input)] px-3 text-sm text-[var(--text)] outline-none focus:border-[#E8A020] text-start"
+              :placeholder="locale.isArabic ? 'اختر المحافظة...' : 'Select Governorate...'"
             />
           </div>
 

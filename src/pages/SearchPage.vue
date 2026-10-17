@@ -1,5 +1,6 @@
 ﻿<script setup lang="ts">
 import { formatPrice } from '@/lib/utils'
+import { readStoredJson } from '@/lib/storage'
 import { computed, ref } from 'vue'
 import { ArrowRight, Clock3, Search, X } from 'lucide-vue-next'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
@@ -9,9 +10,13 @@ const route = useRoute()
 const router = useRouter()
 /** البدء بكلمة البحث القادمة من الرابط ‎/search?q=‎ مباشرة */
 const query = ref(String(route.query.q ?? ''))
-const savedRecent = localStorage.getItem('zaytstore-recent-searches')
+// قراءة آمنة: مصفوفة بحث تالفة في التخزين لا تُسقط الصفحة.
 const recent = ref<string[]>(
-  savedRecent ? (JSON.parse(savedRecent) as string[]) : ['زيت رانيول', '5W-30', 'زيت لومو'],
+  readStoredJson<string[]>(
+    'zaytstore-recent-searches',
+    ['زيت رانيول', '5W-30', 'زيت لومو'],
+    (value) => Array.isArray(value) && value.every((item) => typeof item === 'string'),
+  ),
 )
 const results = computed(() =>
   query.value.length > 1

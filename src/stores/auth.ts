@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
+import { readStoredJson } from '@/lib/storage'
 
 export interface UserAccount {
   id: string
@@ -28,9 +29,12 @@ const defaultUser: UserAccount = {
 }
 
 export const useAuthStore = defineStore('auth', () => {
-  // Load saved state or default to logged in demo if desired
-  const savedRaw = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null
-  const initialUser: UserAccount | null = savedRaw ? JSON.parse(savedRaw) : null
+  // قراءة آمنة: بيانات تالفة أو مُعدَّلة في التخزين لا تُسقط التطبيق — نعيد الحساب الافتراضي.
+  const initialUser = readStoredJson<UserAccount | null>(STORAGE_KEY, null, (value): boolean => {
+    if (typeof value !== 'object' || value === null) return false
+    const candidate = value as Partial<UserAccount>
+    return typeof candidate.id === 'string' && typeof candidate.name === 'string'
+  })
 
   // By default, if nothing saved, we can start with true so client can see avatar and notifications immediately!
   const user = ref<UserAccount | null>(initialUser ?? defaultUser)

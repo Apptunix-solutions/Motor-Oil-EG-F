@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
+import { readStoredJson } from '@/lib/storage'
 
 export interface AppNotification {
   id: string
@@ -53,8 +54,10 @@ const initialNotifications: AppNotification[] = [
 ]
 
 export const useNotificationsStore = defineStore('notifications', () => {
-  const saved = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null
-  const list = ref<AppNotification[]>(saved ? JSON.parse(saved) : initialNotifications)
+  // قراءة آمنة: أي مصفوفة مخزَّنة تالفة أو مُعدَّلة تُهمَش بدل إسقاط التطبيق.
+  const list = ref<AppNotification[]>(
+    readStoredJson<AppNotification[]>(STORAGE_KEY, initialNotifications, Array.isArray),
+  )
 
   const unreadCount = computed(() => list.value.filter((n) => !n.isRead).length)
 
