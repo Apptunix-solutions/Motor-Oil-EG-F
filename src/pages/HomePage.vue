@@ -4,6 +4,8 @@ import {
   ArrowLeft,
   BadgeCheck,
   Banknote,
+  ChevronLeft,
+  ChevronRight,
   Droplets,
   Handshake,
   MapPinned,
@@ -26,6 +28,35 @@ import type { ProductCategory } from '@/types/product'
 const router = useRouter()
 const search = ref('')
 const selectedCategory = ref<ProductCategory | 'All'>('All')
+
+const categoriesTrackRef = ref<HTMLElement | null>(null)
+const categoryButtonRefs = new Map<string, HTMLElement>()
+
+function setCategoryRef(val: string, el: unknown) {
+  if (el) categoryButtonRefs.set(val, el as HTMLElement)
+}
+
+function selectCategory(categoryValue: ProductCategory | 'All', event?: MouseEvent) {
+  selectedCategory.value = categoryValue
+  const target = (event?.currentTarget as HTMLElement) || categoryButtonRefs.get(categoryValue)
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }
+}
+
+function scrollCategories(direction: 'prev' | 'next') {
+  if (!categoriesTrackRef.value) return
+  const isRtl = document.dir === 'rtl' || document.documentElement.dir === 'rtl'
+  const delta = direction === 'next' ? (isRtl ? -220 : 220) : isRtl ? 220 : -220
+  categoriesTrackRef.value.scrollBy({ left: delta, behavior: 'smooth' })
+}
+
+function onCategoryWheel(e: WheelEvent) {
+  if (!categoriesTrackRef.value) return
+  if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+    categoriesTrackRef.value.scrollLeft += e.deltaY
+  }
+}
 
 const heroStats = [
   { value: `${merchants.length}+`, label: 'متجر موثوق' },
@@ -205,38 +236,98 @@ function searchProducts() {
     </section>
 
     <!-- Categories -->
-    <section class="border-y border-[var(--line)] py-7">
-      <div class="flex items-center justify-between gap-4">
-        <p class="shrink-0 text-[12px] font-bold uppercase text-[var(--muted)]">تسوق حسب الفئة</p>
-        <div class="hidden h-px flex-1 bg-white/[0.07] sm:block"></div>
-        <RouterLink to="/products" class="shrink-0 text-[12px] font-semibold text-[#E8A020]"
-          >عرض الكل ←</RouterLink
-        >
-      </div>
-      <div class="no-scrollbar mt-5 flex gap-3 overflow-x-auto pb-1">
-        <button
-          v-for="category in categories"
-          :key="category.value"
-          class="flex shrink-0 items-center gap-3 rounded-xl border px-4 py-3 text-left transition"
-          :class="
-            selectedCategory === category.value
-              ? 'border-[#E8A020]/50 bg-[#E8A020]/10 text-white'
-              : 'border-[var(--line)] bg-[var(--panel)] text-[var(--soft)] hover:border-[var(--line-strong)]'
-          "
-          :aria-pressed="selectedCategory === category.value"
-          @click="selectedCategory = category.value"
-        >
+    <section class="border-y border-[var(--line)] py-6 sm:py-7">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <p
+            class="shrink-0 text-xs sm:text-sm font-bold uppercase tracking-wider text-[var(--muted)]"
+          >
+            تسوق حسب الفئة
+          </p>
           <span
-            class="grid h-8 w-8 place-items-center rounded-lg bg-[var(--glass)] text-sm text-[#E8A020]"
-            ><component :is="category.icon" :size="15" /></span
-          ><span class="whitespace-nowrap text-xs font-semibold">{{ category.label }}</span>
-        </button>
+            class="rounded-full bg-[#E8A020]/15 px-2 py-0.5 text-[11px] font-bold text-[#E8A020]"
+          >
+            {{ categories.length }} فئات
+          </span>
+        </div>
+        <div class="hidden h-px flex-1 bg-[var(--line)] sm:block"></div>
+        <div class="flex items-center gap-2">
+          <!-- Direct Mobile/Desktop Scroll Controls -->
+          <div class="flex items-center gap-1">
+            <button
+              type="button"
+              aria-label="الفئات السابقة"
+              title="الفئات السابقة"
+              class="grid h-7 w-7 place-items-center rounded-lg border border-[var(--line)] bg-[var(--panel)] text-[var(--text)] hover:border-[#E8A020]/50 hover:bg-[#E8A020]/15 hover:text-[#E8A020] transition active:scale-90"
+              @click="scrollCategories('prev')"
+            >
+              <ChevronRight :size="15" stroke-width="2.5" />
+            </button>
+            <button
+              type="button"
+              aria-label="الفئات التالية"
+              title="الفئات التالية"
+              class="grid h-7 w-7 place-items-center rounded-lg border border-[var(--line)] bg-[var(--panel)] text-[var(--text)] hover:border-[#E8A020]/50 hover:bg-[#E8A020]/15 hover:text-[#E8A020] transition active:scale-90"
+              @click="scrollCategories('next')"
+            >
+              <ChevronLeft :size="15" stroke-width="2.5" />
+            </button>
+          </div>
+          <RouterLink
+            to="/products"
+            class="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-[#E8A020] transition hover:underline ps-1"
+          >
+            <span>عرض الكل</span>
+            <span aria-hidden="true">←</span>
+          </RouterLink>
+        </div>
+      </div>
+
+      <!-- Scrollable Category Track with Edge Bleed & High-Contrast Touch Pills -->
+      <div class="relative mt-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div
+          ref="categoriesTrackRef"
+          class="no-scrollbar flex gap-2.5 sm:gap-3 overflow-x-auto pb-2 pt-1 scroll-smooth snap-x snap-mandatory focus:outline-none"
+          role="tablist"
+          aria-label="تسوق حسب الفئة"
+          @wheel.passive="onCategoryWheel"
+        >
+          <button
+            v-for="category in categories"
+            :key="category.value"
+            :ref="(el) => setCategoryRef(category.value, el)"
+            role="tab"
+            :aria-selected="selectedCategory === category.value"
+            type="button"
+            class="group flex shrink-0 items-center gap-2.5 sm:gap-3 rounded-2xl border px-3.5 sm:px-4 py-2.5 sm:py-3 transition-all duration-200 snap-start select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A020]"
+            :class="
+              selectedCategory === category.value
+                ? 'border-[#E8A020] bg-gradient-to-l from-[#E8A020] to-[#f5ab2d] text-[#071F0D] font-black shadow-[0_4px_16px_rgba(232,160,32,0.30)] scale-[1.02]'
+                : 'border-[var(--line)] bg-[var(--panel)] text-[var(--text)] hover:border-[#E8A020]/40 hover:bg-[var(--elevated)]'
+            "
+            @click="selectCategory(category.value, $event)"
+          >
+            <span
+              class="grid h-8 w-8 place-items-center rounded-xl text-sm transition-colors duration-200"
+              :class="
+                selectedCategory === category.value
+                  ? 'bg-[#071F0D]/15 text-[#071F0D]'
+                  : 'bg-[var(--glass)] text-[#E8A020] group-hover:bg-[#E8A020]/15'
+              "
+            >
+              <component :is="category.icon" :size="16" stroke-width="2.3" />
+            </span>
+            <span class="whitespace-nowrap text-xs sm:text-sm font-bold">
+              {{ category.label }}
+            </span>
+          </button>
+        </div>
       </div>
     </section>
 
     <!-- Featured products -->
     <section class="py-12 sm:py-14">
-      <div class="mb-8 flex items-start justify-between gap-4 sm:mb-10">
+      <div class="mb-8 flex items-start justify-between gap-4">
         <div>
           <p class="mb-2 text-[12px] font-bold uppercase text-[#E8A020]">أبرز المنتجات</p>
           <h2

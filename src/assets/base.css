@@ -52,13 +52,19 @@
 }
 html {
   min-width: 320px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   background: var(--bg);
 }
 
 body {
   min-width: 320px;
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   margin: 0;
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--text);
   /* خط القاهرة للنصوص العربية: أحجام أوضح وارتفاع سطر مريح للعين السورية */
@@ -86,13 +92,17 @@ button {
    Chrome / Edge / Safari → *::-webkit-scrollbar-* pseudo-elements
    ─────────────────────────────────────────────────────────────────── */
 
-/* Firefox: thin track, no arrows */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scroll-thumb) transparent;
+/* Firefox only: thin track, no arrows (scoped so Chromium uses ::-webkit-scrollbar without arrows) */
+@supports (-moz-appearance: none) {
+  html,
+  body,
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+  }
 }
 
-/* WebKit: scrollbar size (6 px thin strip) */
+/* WebKit / Chromium / Edge / Safari: 6px slim scrollbar */
 ::-webkit-scrollbar,
 *::-webkit-scrollbar {
   width: 6px;
@@ -117,22 +127,25 @@ html {
   background: var(--scroll-thumb-hover);
 }
 
-/* WebKit: hide arrow buttons (▲▼◄►).
+/* WebKit: remove ALL arrow buttons (▲▼◄►).
    Chrome/Edge require BOTH the bare selector (document-root scrollbar)
-   AND the *:: selector (all child-element scrollbars).
-   The :single-button variants are needed in some Chrome versions. */
+   AND the *:: selector (all child-element scrollbars). */
 ::-webkit-scrollbar-button,
 *::-webkit-scrollbar-button,
 ::-webkit-scrollbar-button:single-button,
 *::-webkit-scrollbar-button:single-button,
-::-webkit-scrollbar-button:single-button:vertical:decrement,
-*::-webkit-scrollbar-button:single-button:vertical:decrement,
-::-webkit-scrollbar-button:single-button:vertical:increment,
-*::-webkit-scrollbar-button:single-button:vertical:increment,
-::-webkit-scrollbar-button:single-button:horizontal:decrement,
-*::-webkit-scrollbar-button:single-button:horizontal:decrement,
-::-webkit-scrollbar-button:single-button:horizontal:increment,
-*::-webkit-scrollbar-button:single-button:horizontal:increment {
+::-webkit-scrollbar-button:start,
+*::-webkit-scrollbar-button:start,
+::-webkit-scrollbar-button:end,
+*::-webkit-scrollbar-button:end,
+::-webkit-scrollbar-button:vertical:decrement,
+*::-webkit-scrollbar-button:vertical:decrement,
+::-webkit-scrollbar-button:vertical:increment,
+*::-webkit-scrollbar-button:vertical:increment,
+::-webkit-scrollbar-button:horizontal:decrement,
+*::-webkit-scrollbar-button:horizontal:decrement,
+::-webkit-scrollbar-button:horizontal:increment,
+*::-webkit-scrollbar-button:horizontal:increment {
   display: none !important;
   width: 0 !important;
   height: 0 !important;

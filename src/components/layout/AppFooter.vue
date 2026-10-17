@@ -43,7 +43,7 @@ function subscribe() {
 
 <template>
   <footer
-    class="w-full max-w-[1440px] mx-auto px-4 sm:px-[clamp(16px,2.9vw,42px)] pb-24 sm:pb-8 text-[var(--text)] transition-colors"
+    class="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pb-24 sm:pb-8 text-[var(--text)] transition-colors"
     :dir="locale.dir"
   >
     <div

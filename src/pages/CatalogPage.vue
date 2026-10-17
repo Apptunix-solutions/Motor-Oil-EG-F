@@ -3,6 +3,8 @@ import { formatPrice } from '@/lib/utils'
 import { computed, ref, watch } from 'vue'
 import {
   ArrowDownUp,
+  ChevronLeft,
+  ChevronRight,
   Filter,
   LayoutGrid,
   List,
@@ -43,6 +45,29 @@ function resolveCategory(raw: unknown): ProductCategory | 'All' {
 /** الحالة الأولى مأخوذة من رابط URL حتى تفتح المشاركة بنفس الفلاتر. */
 const query = ref(String(route.query.q ?? ''))
 const selectedCategory = ref<ProductCategory | 'All'>(resolveCategory(route.query.category))
+const catalogTrackRef = ref<HTMLElement | null>(null)
+
+function selectCategory(catVal: ProductCategory | 'All', event?: MouseEvent) {
+  selectedCategory.value = catVal
+  const target = event?.currentTarget as HTMLElement | undefined
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }
+}
+
+function scrollCatalogCategories(direction: 'prev' | 'next') {
+  if (!catalogTrackRef.value) return
+  const isRtl = document.dir === 'rtl' || document.documentElement.dir === 'rtl'
+  const delta = direction === 'next' ? (isRtl ? -200 : 200) : isRtl ? 200 : -200
+  catalogTrackRef.value.scrollBy({ left: delta, behavior: 'smooth' })
+}
+
+function onCatalogWheel(e: WheelEvent) {
+  if (!catalogTrackRef.value) return
+  if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+    catalogTrackRef.value.scrollLeft += e.deltaY
+  }
+}
 const selectedViscosity = ref(String(route.query.viscosity ?? 'All'))
 const selectedBase = ref(String(route.query.base ?? 'All'))
 const selectedBrands = ref<string[]>(
@@ -211,7 +236,7 @@ function resetSearch() {
       </div>
     </div>
     <div
-      class="sticky top-[72px] z-30 -mx-5 border-y border-[var(--line)] bg-[var(--bg)]/95 px-5 py-4 backdrop-blur-xl sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0"
+      class="sticky top-[72px] z-30 -mx-4 border-y border-[var(--line)] bg-[var(--bg)]/95 px-4 py-4 backdrop-blur-xl sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0"
     >
       <div class="flex gap-2">
         <label class="group relative flex min-w-0 flex-1 items-center">
@@ -248,22 +273,56 @@ function resetSearch() {
           <span v-if="activeFilterCount" class="text-[#E8A020]">({{ activeFilterCount }})</span>
         </button>
       </div>
-      <div class="no-scrollbar mt-3 flex gap-2 overflow-x-auto pb-1" aria-label="تصفية حسب الفئة">
-        <button
-          v-for="category in categories"
-          :key="category.slug"
-          class="flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-semibold transition"
-          :class="
-            selectedCategory === category.value
-              ? 'border-[#E8A020]/50 bg-[#E8A020]/10 text-[#E8A020]'
-              : 'border-[var(--line)] text-[var(--muted)] hover:border-[var(--line-strong)] hover:text-[var(--text)]'
-          "
-          :aria-pressed="selectedCategory === category.value"
-          @click="selectedCategory = category.value"
+      <!-- Category filter track with mobile edge bleed, scroll buttons, and high contrast -->
+      <div class="relative mt-3 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div class="mb-1.5 flex items-center justify-between sm:hidden">
+          <span class="text-[11px] font-bold text-[var(--muted)]">اختر الفئة</span>
+          <div class="flex items-center gap-1">
+            <button
+              type="button"
+              aria-label="الفئات السابقة"
+              title="الفئات السابقة"
+              class="grid h-6 w-6 place-items-center rounded-md border border-[var(--line)] bg-[var(--panel)] text-[var(--text)] hover:border-[#E8A020]/50 hover:bg-[#E8A020]/15 hover:text-[#E8A020] transition active:scale-90"
+              @click="scrollCatalogCategories('prev')"
+            >
+              <ChevronRight :size="13" stroke-width="2.5" />
+            </button>
+            <button
+              type="button"
+              aria-label="الفئات التالية"
+              title="الفئات التالية"
+              class="grid h-6 w-6 place-items-center rounded-md border border-[var(--line)] bg-[var(--panel)] text-[var(--text)] hover:border-[#E8A020]/50 hover:bg-[#E8A020]/15 hover:text-[#E8A020] transition active:scale-90"
+              @click="scrollCatalogCategories('next')"
+            >
+              <ChevronLeft :size="13" stroke-width="2.5" />
+            </button>
+          </div>
+        </div>
+        <div
+          ref="catalogTrackRef"
+          class="no-scrollbar flex gap-2 overflow-x-auto pb-1.5 pt-0.5 scroll-smooth snap-x snap-mandatory"
+          aria-label="تصفية حسب الفئة"
+          role="tablist"
+          @wheel.passive="onCatalogWheel"
         >
-          <component :is="category.icon" :size="14" />
-          {{ category.label }}
-        </button>
+          <button
+            v-for="category in categories"
+            :key="category.slug"
+            role="tab"
+            :aria-selected="selectedCategory === category.value"
+            type="button"
+            class="flex shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-bold transition-all duration-200 snap-start select-none whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A020]"
+            :class="
+              selectedCategory === category.value
+                ? 'border-[#E8A020] bg-gradient-to-l from-[#E8A020] to-[#f5ab2d] text-[#071F0D] font-black shadow-sm shadow-[#E8A020]/25 scale-[1.02]'
+                : 'border-[var(--line)] bg-[var(--panel)] text-[var(--muted)] hover:border-[#E8A020]/40 hover:text-[var(--text)]'
+            "
+            @click="selectCategory(category.value, $event)"
+          >
+            <component :is="category.icon" :size="14" stroke-width="2.3" />
+            <span>{{ category.label }}</span>
+          </button>
+        </div>
       </div>
     </div>
     <div

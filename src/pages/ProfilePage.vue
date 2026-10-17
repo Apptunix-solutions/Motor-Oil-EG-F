@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
 import {
   Bell,
   CheckCheck,
   ChevronLeft,
+  ChevronRight,
   LogOut,
   MapPin,
   Package,
@@ -40,6 +41,61 @@ const notifications = useNotificationsStore()
 type TabKey = 'overview' | 'orders' | 'garage' | 'addresses' | 'notifications' | 'settings'
 
 const activeTab = ref<TabKey>('overview')
+const profileTabsTrackRef = ref<HTMLElement | null>(null)
+
+const profileTabs = computed(() => [
+  { id: 'overview' as const, label: locale.isArabic ? 'نظرة عامة' : 'Overview', icon: Sparkles },
+  {
+    id: 'orders' as const,
+    label: locale.isArabic
+      ? `طلباتي (${orders.orders.length})`
+      : `Orders (${orders.orders.length})`,
+    icon: Package,
+  },
+  { id: 'garage' as const, label: locale.isArabic ? 'كراجي وسياراتي' : 'My Garage', icon: Wrench },
+  {
+    id: 'notifications' as const,
+    label: locale.isArabic ? 'الإشعارات' : 'Notifications',
+    icon: Bell,
+    badge: notifications.unreadCount,
+  },
+  {
+    id: 'addresses' as const,
+    label: locale.isArabic ? 'عناوين التوصيل' : 'Addresses',
+    icon: MapPin,
+  },
+  {
+    id: 'settings' as const,
+    label: locale.isArabic ? 'إعدادات الحساب' : 'Settings',
+    icon: Settings,
+  },
+])
+
+const tabButtonRefs = new Map<string, HTMLElement>()
+function setTabRef(id: string, el: unknown) {
+  if (el) tabButtonRefs.set(id, el as HTMLElement)
+}
+
+function scrollToTab(tab: TabKey) {
+  const el = tabButtonRefs.get(tab)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }
+}
+
+function scrollTabs(direction: 'prev' | 'next') {
+  if (!profileTabsTrackRef.value) return
+  const isRtl = document.dir === 'rtl' || document.documentElement.dir === 'rtl'
+  const delta = direction === 'next' ? (isRtl ? -200 : 200) : isRtl ? 200 : -200
+  profileTabsTrackRef.value.scrollBy({ left: delta, behavior: 'smooth' })
+}
+
+function onTabsWheel(e: WheelEvent) {
+  if (!profileTabsTrackRef.value) return
+  if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+    profileTabsTrackRef.value.scrollLeft += e.deltaY
+  }
+}
 
 watch(
   () => route.query.tab,
@@ -57,6 +113,14 @@ watch(
   },
   { immediate: true },
 )
+
+watch(activeTab, (newTab) => {
+  scrollToTab(newTab)
+})
+
+onMounted(() => {
+  setTimeout(() => scrollToTab(activeTab.value), 250)
+})
 
 function switchTab(tab: TabKey) {
   activeTab.value = tab
@@ -180,101 +244,64 @@ function handleLogout() {
       </button>
     </div>
 
-    <!-- Navigation Tabs (Horizontally scrollable with smooth touch on mobile) -->
-    <div
-      class="mt-6 sm:mt-8 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto border-b border-[var(--line)] pb-3 scrollbar-none flex gap-2"
-    >
-      <button
-        type="button"
-        class="inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold transition whitespace-nowrap"
-        :class="
-          activeTab === 'overview'
-            ? 'bg-[#E8A020] text-[#071F0D] shadow-md shadow-[#E8A020]/20'
-            : 'border border-[var(--line)] bg-[var(--glass)] text-[var(--muted)] hover:text-[var(--text)]'
-        "
-        @click="switchTab('overview')"
+    <!-- Navigation Tabs Track with edge bleed on mobile, navigation controls, and focus auto-center -->
+    <div class="relative mt-6 sm:mt-8 -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div class="mb-2 flex items-center justify-between">
+        <span class="text-xs font-bold text-[var(--muted)]">أقسام الحساب</span>
+        <!-- Scroll Navigation Buttons for easy tab browsing -->
+        <div class="flex items-center gap-1">
+          <button
+            type="button"
+            aria-label="التبويب السابق"
+            title="التبويب السابق"
+            class="grid h-7 w-7 place-items-center rounded-lg border border-[var(--line)] bg-[var(--panel)] text-[var(--text)] hover:border-[#E8A020]/50 hover:bg-[#E8A020]/15 hover:text-[#E8A020] transition active:scale-90"
+            @click="scrollTabs('prev')"
+          >
+            <ChevronRight :size="15" stroke-width="2.5" />
+          </button>
+          <button
+            type="button"
+            aria-label="التبويب التالي"
+            title="التبويب التالي"
+            class="grid h-7 w-7 place-items-center rounded-lg border border-[var(--line)] bg-[var(--panel)] text-[var(--text)] hover:border-[#E8A020]/50 hover:bg-[#E8A020]/15 hover:text-[#E8A020] transition active:scale-90"
+            @click="scrollTabs('next')"
+          >
+            <ChevronLeft :size="15" stroke-width="2.5" />
+          </button>
+        </div>
+      </div>
+      <div
+        ref="profileTabsTrackRef"
+        class="no-scrollbar flex items-center gap-2 overflow-x-auto border-b border-[var(--line)] pb-3 scroll-smooth snap-x snap-mandatory select-none"
+        role="tablist"
+        aria-label="تبويبات الملف الشخصي"
+        @wheel.passive="onTabsWheel"
       >
-        <Sparkles :size="14" />
-        <span>{{ locale.isArabic ? 'نظرة عامة' : 'Overview' }}</span>
-      </button>
-
-      <button
-        type="button"
-        class="inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold transition whitespace-nowrap"
-        :class="
-          activeTab === 'orders'
-            ? 'bg-[#E8A020] text-[#071F0D] shadow-md shadow-[#E8A020]/20'
-            : 'border border-[var(--line)] bg-[var(--glass)] text-[var(--muted)] hover:text-[var(--text)]'
-        "
-        @click="switchTab('orders')"
-      >
-        <Package :size="14" />
-        <span>{{
-          locale.isArabic ? `طلباتي (${orders.orders.length})` : `Orders (${orders.orders.length})`
-        }}</span>
-      </button>
-
-      <button
-        type="button"
-        class="inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold transition whitespace-nowrap"
-        :class="
-          activeTab === 'garage'
-            ? 'bg-[#E8A020] text-[#071F0D] shadow-md shadow-[#E8A020]/20'
-            : 'border border-[var(--line)] bg-[var(--glass)] text-[var(--muted)] hover:text-[var(--text)]'
-        "
-        @click="switchTab('garage')"
-      >
-        <Wrench :size="14" />
-        <span>{{ locale.isArabic ? 'كراجي وسياراتي' : 'My Garage' }}</span>
-      </button>
-
-      <button
-        type="button"
-        class="inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold transition whitespace-nowrap"
-        :class="
-          activeTab === 'notifications'
-            ? 'bg-[#E8A020] text-[#071F0D] shadow-md shadow-[#E8A020]/20'
-            : 'border border-[var(--line)] bg-[var(--glass)] text-[var(--muted)] hover:text-[var(--text)]'
-        "
-        @click="switchTab('notifications')"
-      >
-        <Bell :size="14" />
-        <span>{{ locale.isArabic ? 'الإشعارات' : 'Notifications' }}</span>
-        <span
-          v-if="notifications.unreadCount > 0"
-          class="rounded-full bg-red-500 px-1.5 py-0.2 text-[11px] leading-none font-black text-white"
+        <button
+          v-for="tab in profileTabs"
+          :key="tab.id"
+          :ref="(el) => setTabRef(tab.id, el)"
+          role="tab"
+          :aria-selected="activeTab === tab.id"
+          type="button"
+          class="inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold transition-all duration-200 snap-start whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A020]"
+          :class="
+            activeTab === tab.id
+              ? 'border border-[#E8A020] bg-gradient-to-l from-[#E8A020] to-[#f5ab2d] text-[#071F0D] font-black shadow-[0_4px_16px_rgba(232,160,32,0.30)] scale-[1.02]'
+              : 'border border-[var(--line)] bg-[var(--panel)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[#E8A020]/40'
+          "
+          @click="switchTab(tab.id)"
         >
-          {{ notifications.unreadCount }}
-        </span>
-      </button>
-
-      <button
-        type="button"
-        class="inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold transition whitespace-nowrap"
-        :class="
-          activeTab === 'addresses'
-            ? 'bg-[#E8A020] text-[#071F0D] shadow-md shadow-[#E8A020]/20'
-            : 'border border-[var(--line)] bg-[var(--glass)] text-[var(--muted)] hover:text-[var(--text)]'
-        "
-        @click="switchTab('addresses')"
-      >
-        <MapPin :size="14" />
-        <span>{{ locale.isArabic ? 'عناوين التوصيل' : 'Addresses' }}</span>
-      </button>
-
-      <button
-        type="button"
-        class="inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold transition whitespace-nowrap"
-        :class="
-          activeTab === 'settings'
-            ? 'bg-[#E8A020] text-[#071F0D] shadow-md shadow-[#E8A020]/20'
-            : 'border border-[var(--line)] bg-[var(--glass)] text-[var(--muted)] hover:text-[var(--text)]'
-        "
-        @click="switchTab('settings')"
-      >
-        <Settings :size="14" />
-        <span>{{ locale.isArabic ? 'إعدادات الحساب' : 'Settings' }}</span>
-      </button>
+          <component :is="tab.icon" :size="15" stroke-width="2.3" />
+          <span>{{ tab.label }}</span>
+          <span
+            v-if="tab.badge && tab.badge > 0"
+            class="rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] leading-none font-black text-white shadow-sm"
+          >
+            {{ tab.badge }}
+          </span>
+        </button>
+      </div>
     </div>
 
     <!-- TAB 1: OVERVIEW -->

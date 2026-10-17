@@ -140,11 +140,9 @@ function handleMobileRegister() {
       <header
         class="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--bg)]/90 backdrop-blur-xl"
       >
-        <div class="mx-auto max-w-[1440px] px-3.5 sm:px-8 lg:px-12">
+        <div class="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-12">
           <!-- Desktop & Tablet Header (sm and up) -->
-          <div
-            class="relative hidden h-[56px] items-center justify-between border-b border-[var(--line)] sm:flex lg:h-[62px]"
-          >
+          <div class="relative hidden h-[56px] items-center justify-between sm:flex lg:h-[62px]">
             <!-- RIGHT (in RTL) / LEFT (in LTR): Options & User Actions -->
             <div class="flex items-center gap-1.5 sm:gap-2">
               <!-- Auth: Login button if not logged in, or User Avatar dropdown if logged in -->
@@ -282,10 +280,8 @@ function handleMobileRegister() {
             </div>
           </div>
 
-          <!-- Mobile Header Bar (Screen < sm, fluid & perfectly spaced) -->
-          <div
-            class="flex h-[52px] items-center justify-between border-b border-[var(--line)] sm:hidden"
-          >
+          <!-- Mobile Header Bar (Screen < sm, fluid & zero horizontal overflow) -->
+          <div class="flex h-[52px] items-center justify-between sm:hidden w-full max-w-full gap-2">
             <!-- Start: Logo and Brand -->
             <RouterLink to="/" class="flex items-center gap-1.5 shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="h-6 w-6 shrink-0">
@@ -295,13 +291,13 @@ function handleMobileRegister() {
                   fill="#E8A020"
                 />
               </svg>
-              <span class="display-font text-[14px] font-black text-[#E8A020]">
+              <span class="display-font text-[13.5px] font-black text-[#E8A020]">
                 ZAYT<span class="text-[var(--text)]">STORE</span>
               </span>
             </RouterLink>
 
-            <!-- End: Actions for mobile -->
-            <div class="flex items-center gap-1.5">
+            <!-- End: Actions for mobile (tight spacing, zero overflow) -->
+            <div class="flex items-center gap-1 shrink-0">
               <!-- Avatar or Login on mobile -->
               <template v-if="auth.isLoggedIn">
                 <UserMenuDropdown />
@@ -319,7 +315,7 @@ function handleMobileRegister() {
               <RouterLink
                 to="/cart"
                 :aria-label="locale.t('cart')"
-                class="relative grid h-7 w-7 place-items-center rounded-md border border-[#E8A020]/60 bg-[#E8A020] text-[#071F0D]"
+                class="relative hidden min-[400px]:grid h-7 w-7 place-items-center rounded-md border border-[#E8A020]/60 bg-[#E8A020] text-[#071F0D]"
               >
                 <ShoppingBag :size="13" stroke-width="2.5" />
                 <span
@@ -464,7 +460,7 @@ function handleMobileRegister() {
         </div>
       </header>
 
-      <main id="app-content" class="mx-auto max-w-[1440px] px-4 pb-28 sm:px-8 lg:px-12 lg:pb-12">
+      <main id="app-content" class="mx-auto max-w-[1440px] px-4 pb-12 sm:px-8 lg:px-12">
         <RouterView v-slot="{ Component }">
           <Transition name="fade" mode="out-in">
             <component :is="Component" />
