@@ -16,21 +16,13 @@ function handleToggle() {
 <template>
   <button
     type="button"
-    :title="locale.isArabic ? 'التبديل إلى الإنجليزية (EN)' : 'Switch to Arabic (ع)'"
-    :aria-label="locale.isArabic ? 'التبديل إلى الإنجليزية' : 'Switch to Arabic'"
-    class="relative inline-flex h-8 items-center gap-1 rounded-md border border-[var(--line)] bg-[var(--glass)] px-2 text-[12px] font-bold text-[var(--muted)] transition-all duration-200 hover:border-[#E8A020]/50 hover:bg-[#E8A020]/10 hover:text-[#E8A020]"
+    :title="locale.isArabic ? 'Switch to English (EN)' : 'التبديل إلى العربية (ع)'"
+    :aria-label="locale.isArabic ? 'Switch to English' : 'التبديل إلى العربية'"
+    class="relative inline-flex h-8 min-w-[34px] items-center justify-center rounded-md border border-[var(--line)] bg-[var(--glass)] px-2 text-[12px] font-extrabold text-[var(--text)] transition-all duration-200 hover:border-[#E8A020]/60 hover:bg-[#E8A020]/10 hover:text-[#E8A020] active:scale-95"
     @click="handleToggle"
   >
-    <span
-      class="rounded px-1 transition"
-      :class="locale.isArabic ? 'text-[#E8A020] font-black' : 'opacity-40'"
-      >ع</span
-    >
-    <span class="text-[10px] text-[var(--line-strong)]">/</span>
-    <span
-      class="rounded px-1 text-[11px] transition tracking-tight"
-      :class="locale.isEnglish ? 'text-[#E8A020] font-black' : 'opacity-40'"
-      >EN</span
-    >
+    <span class="font-black text-[#E8A020]">
+      {{ locale.isArabic ? 'EN' : 'ع' }}
+    </span>
   </button>
 </template>

@@ -242,7 +242,7 @@ function handleLogout() {
         <span>{{ locale.isArabic ? 'الإشعارات' : 'Notifications' }}</span>
         <span
           v-if="notifications.unreadCount > 0"
-          class="rounded-full bg-red-500 px-1.5 py-0.2 text-[10px] font-black text-white"
+          class="rounded-full bg-red-500 px-1.5 py-0.2 text-[11px] leading-none font-black text-white"
         >
           {{ notifications.unreadCount }}
         </span>
@@ -347,7 +347,7 @@ function handleLogout() {
               <p class="display-font text-2xl sm:text-3xl font-extrabold text-[var(--text)]">
                 {{ orders.orders.length }}
               </p>
-              <p class="mt-1 text-[10px] sm:text-[11px] text-[var(--muted)]">
+              <p class="mt-1 text-[11px] text-[var(--muted)]">
                 {{ locale.isArabic ? 'إجمالي الطلبات' : 'Total Orders' }}
               </p>
             </div>
@@ -357,7 +357,7 @@ function handleLogout() {
               <p class="display-font text-2xl sm:text-3xl font-extrabold text-[#E8A020]">
                 {{ wishlist.count }}
               </p>
-              <p class="mt-1 text-[10px] sm:text-[11px] text-[var(--muted)]">
+              <p class="mt-1 text-[11px] text-[var(--muted)]">
                 {{ locale.isArabic ? 'المفضلة' : 'Wishlist' }}
               </p>
             </div>
@@ -367,7 +367,7 @@ function handleLogout() {
               <p class="display-font text-2xl sm:text-3xl font-extrabold text-emerald-400">
                 {{ savedAddresses.length }}
               </p>
-              <p class="mt-1 text-[10px] sm:text-[11px] text-[var(--muted)]">
+              <p class="mt-1 text-[11px] text-[var(--muted)]">
                 {{ locale.isArabic ? 'عناوين مسجلة' : 'Addresses' }}
               </p>
             </div>
@@ -613,7 +613,7 @@ function handleLogout() {
                 {{ item.title }}
               </h3>
               <p class="mt-1 text-xs text-[var(--muted)] leading-relaxed">{{ item.message }}</p>
-              <span class="mt-1.5 inline-block text-[10px] text-[var(--muted)]">{{
+              <span class="mt-1.5 inline-block text-[11px] text-[var(--muted)]">{{
                 item.timestamp
               }}</span>
             </div>
@@ -686,7 +686,7 @@ function handleLogout() {
               <h3 class="text-sm font-bold text-[var(--text)]">{{ addr.title }}</h3>
               <span
                 v-if="addr.isDefault"
-                class="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold text-emerald-400"
+                class="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] leading-none font-bold text-emerald-400"
               >
                 {{ locale.isArabic ? 'الافتراضي' : 'Default' }}
               </span>

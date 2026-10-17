@@ -324,7 +324,7 @@ function handleMobileRegister() {
                 <ShoppingBag :size="13" stroke-width="2.5" />
                 <span
                   v-if="cartLabel"
-                  class="absolute -start-1 -top-1 grid h-3.5 min-w-3.5 place-items-center rounded-full bg-[#0F3D20] px-0.5 text-[9px] font-bold text-[var(--text)]"
+                  class="absolute -start-1 -top-1 grid h-3.5 min-w-3.5 place-items-center rounded-full bg-[#0F3D20] px-0.5 text-[11px] leading-none font-bold text-[var(--text)]"
                 >
                   {{ cartLabel }}
                 </span>
@@ -509,7 +509,7 @@ function handleMobileRegister() {
             <span>{{ locale.t('cart') }}</span>
             <span
               v-if="cartLabel"
-              class="absolute -end-2 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-[#E8A020] px-1 text-[10px] font-extrabold text-[#071F0D]"
+              class="absolute -end-2 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-[#E8A020] px-1 text-[11px] leading-none font-extrabold text-[#071F0D]"
             >
               {{ cartLabel }}
             </span>

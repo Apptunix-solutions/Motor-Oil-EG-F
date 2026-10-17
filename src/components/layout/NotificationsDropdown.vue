@@ -91,17 +91,25 @@ onBeforeUnmount(() => {
       <!-- Unread Badge Counter -->
       <span
         v-if="notifStore.unreadCount > 0"
-        class="absolute -start-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-red-500 px-1 text-[10px] font-black text-white shadow-[0_0_8px_rgba(239,68,68,0.7)]"
+        class="absolute -start-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-red-500 px-1 text-[11px] leading-none font-black text-white shadow-[0_0_8px_rgba(239,68,68,0.7)]"
       >
         {{ notifStore.unreadCount }}
       </span>
     </button>
 
+    <!-- Backdrop for mobile -->
+    <div
+      v-if="isOpen"
+      class="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs sm:hidden"
+      aria-hidden="true"
+      @click="isOpen = false"
+    ></div>
+
     <!-- Dropdown Modal / Popover -->
     <Transition name="notif-pop">
       <div
         v-if="isOpen"
-        class="absolute end-0 sm:start-0 sm:end-auto top-full z-50 mt-2 w-80 max-w-[calc(100vw-1.5rem)] sm:w-96 overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)] shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
+        class="fixed start-3 end-3 top-[58px] z-50 flex max-h-[82vh] flex-col overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)] shadow-[0_24px_64px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:absolute sm:inset-x-auto sm:start-0 sm:end-auto sm:top-full sm:mt-2 sm:w-96 sm:max-h-[560px]"
       >
         <!-- Header -->
         <div
@@ -231,7 +239,7 @@ onBeforeUnmount(() => {
                 >
                   {{ item.title }}
                 </h4>
-                <span class="text-[10px] text-[var(--muted)] shrink-0">{{ item.timestamp }}</span>
+                <span class="text-[11px] text-[var(--muted)] shrink-0">{{ item.timestamp }}</span>
               </div>
               <p class="mt-1 text-[11px] leading-relaxed text-[var(--muted)] line-clamp-2">
                 {{ item.message }}

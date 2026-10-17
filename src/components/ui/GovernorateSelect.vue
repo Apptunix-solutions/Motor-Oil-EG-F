@@ -107,12 +107,12 @@ const displayPlaceholder = computed(() => {
                 <SelectItemText>
                   {{ locale.isArabic ? gov.nameAr : gov.nameEn }}
                 </SelectItemText>
-                <span v-if="!locale.isArabic" class="text-[10px] text-[var(--muted)]">
+                <span v-if="!locale.isArabic" class="text-[11px] text-[var(--muted)]">
                   ({{ gov.nameAr }})
                 </span>
                 <span
                   v-if="gov.region && locale.isArabic"
-                  class="rounded-md bg-[var(--glass)] px-1.5 py-0.5 text-[9px] font-normal text-[var(--muted)]"
+                  class="rounded-md bg-[var(--glass)] px-1.5 py-0.5 text-[11px] font-normal text-[var(--muted)]"
                 >
                   {{ gov.region }}
                 </span>

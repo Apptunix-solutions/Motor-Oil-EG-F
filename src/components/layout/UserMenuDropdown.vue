@@ -91,11 +91,19 @@ onBeforeUnmount(() => {
       ></span>
     </button>
 
+    <!-- Backdrop for mobile -->
+    <div
+      v-if="isOpen"
+      class="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs sm:hidden"
+      aria-hidden="true"
+      @click="isOpen = false"
+    ></div>
+
     <!-- Profile Menu Dropdown -->
     <Transition name="menu-pop">
       <div
         v-if="isOpen"
-        class="absolute end-0 sm:start-0 sm:end-auto top-full z-50 mt-2 w-72 max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)] shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
+        class="fixed start-3 end-3 top-[58px] z-50 max-h-[85vh] overflow-y-auto rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)] shadow-[0_24px_64px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:absolute sm:inset-x-auto sm:start-0 sm:end-auto sm:top-full sm:mt-2 sm:w-72"
       >
         <!-- User Info Header -->
         <div class="border-b border-[var(--line)] bg-[var(--glass)] p-4">
@@ -122,7 +130,7 @@ onBeforeUnmount(() => {
                 {{ auth.user?.email || auth.user?.phone }}
               </p>
               <span
-                class="mt-1 inline-block rounded-md bg-[#E8A020]/15 px-2 py-0.5 text-[10px] font-bold text-[#E8A020]"
+                class="mt-1 inline-block rounded-md bg-[#E8A020]/15 px-2 py-0.5 text-[11px] font-bold text-[#E8A020]"
               >
                 {{
                   auth.user?.role === 'merchant'

@@ -56,7 +56,7 @@ onBeforeUnmount(() => {
       >
         <MapPin :size="12" class="text-[#E8A020]" />
         <span class="font-bold text-[var(--text)]">{{ auth.selectedLocation }}</span>
-        <span class="text-[10px] text-[var(--muted)]">· سوريا</span>
+        <span class="text-[11px] text-[var(--muted)]">· سوريا</span>
         <ChevronDown
           :size="12"
           class="text-[var(--muted)] transition-transform duration-200"
@@ -68,11 +68,11 @@ onBeforeUnmount(() => {
       <Transition name="drop">
         <div
           v-if="isOpen"
-          class="absolute left-0 top-full z-50 mt-1.5 w-52 overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)] p-2 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl"
+          class="absolute start-0 sm:start-auto sm:end-0 top-full z-50 mt-1.5 w-56 overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)] p-2 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl"
         >
           <div class="px-2.5 py-2 border-b border-[var(--line)]">
             <p class="text-[11px] font-bold text-[var(--text)]">اختر مدينة التوصيل</p>
-            <p class="text-[10px] text-[var(--muted)]">لعرض أسعار التوصيل والتجار الأقرب إليك</p>
+            <p class="text-[11px] text-[var(--muted)]">لعرض أسعار التوصيل والتجار الأقرب إليك</p>
           </div>
 
           <div class="max-h-56 overflow-y-auto py-1">
