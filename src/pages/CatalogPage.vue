@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { formatPrice } from '@/lib/utils'
 import { computed, ref, watch } from 'vue'
 import {
@@ -214,13 +214,20 @@ function resetSearch() {
       class="sticky top-[72px] z-30 -mx-5 border-y border-[var(--line)] bg-[var(--bg)]/95 px-5 py-4 backdrop-blur-xl sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0"
     >
       <div class="flex gap-2">
-        <label class="relative flex min-w-0 flex-1 items-center"
-          ><span class="sr-only">بحث في المنتجات</span
-          ><Search :size="17" class="absolute right-4 text-[var(--muted)]" /><input
+        <label class="group relative flex min-w-0 flex-1 items-center">
+          <span class="sr-only">بحث في المنتجات</span>
+          <div
+            class="pointer-events-none absolute start-4 flex items-center justify-center text-[var(--muted)] transition-colors duration-200 group-focus-within:text-[#E8A020]"
+            aria-hidden="true"
+          >
+            <Search :size="17" class="stroke-[2.2]" />
+          </div>
+          <input
             v-model="query"
             type="search"
-            placeholder="ابحث بالعلامة أو اللزوجة أو المواصفة"
-            class="h-12 w-full rounded-xl border border-[var(--line)] bg-[var(--panel)] pr-11 pl-4 text-sm text-[var(--text)] outline-none placeholder:text-[var(--muted)] focus:border-[#E8A020]/60" /></label
+            placeholder="ابحث بالعلامة أو اللزوجة أو المواصفة…"
+            class="h-12 w-full rounded-xl border border-[var(--line)] bg-[var(--panel)] ps-11 pe-4 text-sm font-medium text-[var(--text)] outline-none placeholder:text-[var(--muted)] transition-all duration-200 hover:border-[var(--line-strong)] focus:border-[#E8A020] focus:ring-4 focus:ring-[#E8A020]/15"
+          /> </label
         ><button
           class="relative grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-[var(--line)] bg-[var(--panel)] text-[var(--soft)] transition hover:border-[var(--line-strong)] hover:text-[var(--text)] sm:hidden"
           aria-label="فتح الفلاتر"
@@ -372,12 +379,14 @@ function resetSearch() {
         :key="product.id"
         :to="`/product/${product.slug}`"
         class="flex items-center gap-4 rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-3 transition hover:border-[var(--line-strong)] sm:p-4"
-        ><div class="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[var(--elevated)]">
+        ><div
+          class="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-[var(--line)]/50 bg-[var(--elevated)] p-2"
+        >
           <img
             :src="product.image"
             :alt="product.name"
             loading="lazy"
-            class="h-full w-full object-cover opacity-70 mix-blend-screen"
+            class="h-full w-full object-contain"
           />
         </div>
         <div class="min-w-0 flex-1">

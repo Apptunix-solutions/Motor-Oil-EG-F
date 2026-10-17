@@ -39,6 +39,10 @@ const cartLabel = computed(() => (cart.count > 0 ? `${cart.count}` : ''))
  * تبديل السمة مع كشف دائري (View Transitions API) ينطلق من مركز زر التبديل.
  * نحفظ إحداثيات الزر كنِسَب مئوية من أبعاد النافذة، ثم نُطلق الانتقال.
  */
+// عدّاد تسلسلي للانتقالات: يمنع تنظيف الاسم أثناء وجود انتقال أحدث نشِط
+// (عند الضغط السريع المتتالي) من أن يُفسد انتقال الزر الأخير.
+let themeVTSeq = 0
+
 function toggleTheme(event: MouseEvent) {
   const root = document.documentElement
 
@@ -60,18 +64,29 @@ function toggleTheme(event: MouseEvent) {
     // ثم نزيله بعد الانتهاء ليبقى كل شيء كما هو.
     button?.style.setProperty('view-transition-name', 'theme-toggle')
 
+    const seq = ++themeVTSeq
+
     // الـ callback متزامن عمداً: تغيير data-theme يتم فوراً داخل ui.toggle()،
     // فلا تأخير (latency) بين الضغطة وبدء الكشف — وهذا سرّ سلاسة الحركة.
     const transition = document.startViewTransition(() => {
       ui.toggle()
     })
 
+    // عند الضغط السريع يتخطّى المتصفح الانتقال السابق فيرفض AbortError.
+    // نبتلع هذا الرفض على كلا الوعدَين (.ready و .finished) حتى لا يصل
+    // إلى معالج الأخطاء العام ويظهر كخطأ وهمي في الكونسول.
+    transition.ready.catch(() => {
+      // الانتقال تخطّى؛ لا شيء يزعجنا.
+    })
     transition.finished
       .catch(() => {
         // الانتقال قد يتخطّى في بعض الحالات؛ لا نعترض.
       })
       .finally(() => {
-        button?.style.removeProperty('view-transition-name')
+        // ننظّف الاسم فقط إذا لم يبدأ انتقال أحدث (لا نُظهر اسم انتقال حيّ).
+        if (seq === themeVTSeq) {
+          button?.style.removeProperty('view-transition-name')
+        }
       })
   } else {
     ui.toggle()

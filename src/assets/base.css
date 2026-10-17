@@ -81,27 +81,44 @@ button {
   color: var(--text);
 }
 
-/* ═══ الشريط الجانبي: رفيع 6px + إخفاء كامل لأسهم التمرير (▲▼) ═══ */
+/* ═══ شريط التمرير: رفيع 6px + إخفاء كامل لأسهم التمرير (▲▼) كما في 7-motors ═══ */
+::-webkit-scrollbar,
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+::-webkit-scrollbar-track,
 *::-webkit-scrollbar-track {
-  background: var(--scroll-track);
+  background: transparent;
 }
+::-webkit-scrollbar-thumb,
 *::-webkit-scrollbar-thumb {
   background: var(--scroll-thumb);
-  border-radius: 10px;
+  border-radius: 9999px;
+  transition: background-color 0.2s;
 }
+::-webkit-scrollbar-thumb:hover,
 *::-webkit-scrollbar-thumb:hover {
   background: var(--scroll-thumb-hover);
 }
 
-/* إخفاء أسهم التمرير (▲▼) في المتصفحات بالكامل وبشكل قاطع */
+/* إخفاء أزرار وأسهم التمرير (▲▼) للأعلى والأسفل من الجذور بكل الحالات */
 ::-webkit-scrollbar-button,
 *::-webkit-scrollbar-button,
+::-webkit-scrollbar-button:single-button,
+*::-webkit-scrollbar-button:single-button,
+::-webkit-scrollbar-button:vertical:decrement,
+*::-webkit-scrollbar-button:vertical:decrement,
+::-webkit-scrollbar-button:vertical:increment,
+*::-webkit-scrollbar-button:vertical:increment,
+::-webkit-scrollbar-button:horizontal:decrement,
+*::-webkit-scrollbar-button:horizontal:decrement,
+::-webkit-scrollbar-button:horizontal:increment,
+*::-webkit-scrollbar-button:horizontal:increment,
 ::-webkit-scrollbar-button:start,
+*::-webkit-scrollbar-button:start,
 ::-webkit-scrollbar-button:end,
+*::-webkit-scrollbar-button:end,
 ::-webkit-scrollbar-button:vertical:start:increment,
 ::-webkit-scrollbar-button:vertical:end:decrement,
 ::-webkit-scrollbar-button:vertical:start:decrement,
@@ -110,11 +127,26 @@ button {
 ::-webkit-scrollbar-button:horizontal:end:decrement,
 ::-webkit-scrollbar-button:horizontal:start:decrement,
 ::-webkit-scrollbar-button:horizontal:end:increment {
-  display: none !important;
-  height: 0 !important;
-  width: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
   background: transparent !important;
-  border: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  html,
+  body {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+  }
 }
 
 /* فئات إخفاء شريط التمرير بالكامل للعناصر الأفقية والتمرير باللمس */

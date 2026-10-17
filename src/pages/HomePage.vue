@@ -14,6 +14,7 @@ import {
   Star,
   Store,
   Truck,
+  X,
 } from 'lucide-vue-next'
 import { RouterLink, useRouter } from 'vue-router'
 import ProductCard from '@/components/product/ProductCard.vue'
@@ -21,7 +22,6 @@ import { categories } from '@/data/categories'
 import { featuredMerchants, merchants } from '@/data/merchants'
 import { products } from '@/data/products'
 import type { ProductCategory } from '@/types/product'
-import { UiButton } from '@/components/ui'
 
 const router = useRouter()
 const search = ref('')
@@ -73,51 +73,71 @@ function searchProducts() {
   <div>
     <!-- Hero -->
     <section
-      class="relative mt-5 overflow-hidden rounded-[20px] border border-[#E8A020]/25 bg-gradient-to-bl from-[#0F3D20] via-[#0B2A14] to-[#071F0D] px-5 py-12 sm:px-10 sm:py-16 lg:px-14 lg:py-20"
+      class="group relative mt-5 overflow-hidden rounded-[24px] border border-[#E8A020]/30 bg-[#071F0D] px-5 py-12 sm:px-10 sm:py-16 lg:px-14 lg:py-20 shadow-[0_12px_40px_rgba(7,31,13,0.5)]"
     >
-      <div
-        class="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#E8A020]/[0.10] blur-[110px]"
-      ></div>
-      <div
-        class="absolute -bottom-28 -left-20 h-72 w-72 rounded-full bg-[#0F3D20]/60 blur-[110px]"
-      ></div>
+      <!-- Hero Background Image with Cinematic Depth & Ambient Overlays -->
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <img
+          src="/images/hero-oil-bg.jpg"
+          alt=""
+          fetchpriority="high"
+          loading="eager"
+          decoding="async"
+          class="h-full w-full object-cover object-center opacity-40 sm:opacity-50 transition-transform duration-1000 ease-out group-hover:scale-105"
+        />
+        <!-- Directional base gradient overlay -->
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-[#071F0D] via-[#0B2A14]/80 to-[#0F3D20]/60 mix-blend-multiply"
+        ></div>
+        <!-- Directional gradient to guarantee crystal-clear text readability in RTL & LTR -->
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-transparent via-[#071F0D]/75 to-[#071F0D]/95 rtl:bg-gradient-to-l rtl:from-transparent rtl:via-[#071F0D]/75 rtl:to-[#071F0D]/95"
+        ></div>
+        <!-- Ambient radial glow spots -->
+        <div
+          class="absolute -end-24 -top-24 h-80 w-80 rounded-full bg-[#E8A020]/[0.18] blur-[110px]"
+        ></div>
+        <div
+          class="absolute -start-20 -bottom-28 h-80 w-80 rounded-full bg-[#0F3D20]/70 blur-[110px]"
+        ></div>
+      </div>
 
       <div class="relative z-10">
         <p
-          class="inline-flex items-center gap-2 rounded-full border border-[#E8A020]/30 bg-[#E8A020]/10 px-4 py-1.5 text-[12px] font-bold text-[#E8A020]"
+          class="inline-flex items-center gap-2 rounded-full border border-[#E8A020]/30 bg-[#E8A020]/15 px-4 py-1.5 text-[12px] font-bold text-[#E8A020] shadow-sm backdrop-blur-md"
         >
           <Droplets :size="13" />
           المنصة الأولى لزيوت السيارات في سوريا
         </p>
 
         <h1
-          class="display-font mt-6 max-w-3xl text-[clamp(2.2rem,7vw,4.4rem)] font-extrabold leading-[1.15] text-[var(--text)]"
+          class="display-font mt-6 max-w-3xl text-[clamp(2.2rem,7vw,4.4rem)] font-extrabold leading-[1.15] text-white"
         >
           تسوق من <span class="text-[#E8A020]">أفضل متاجر</span> الزيوت وقطع الغيار
         </h1>
 
-        <p class="mt-5 max-w-xl text-sm leading-loose text-white/80 sm:text-base">
+        <p class="mt-5 max-w-xl text-sm leading-loose text-white/85 sm:text-base">
           منصة تجمع أفضل تجار الزيوت والمصافي وقطع الغيار — أسعار شفافة، توصيل موثوق، جودة مضمونة
         </p>
 
         <div class="mt-8 flex flex-wrap gap-3">
           <RouterLink
             to="/products"
-            class="inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-l from-[#E8A020] to-[#c47a10] px-7 text-sm font-bold text-[var(--text)] shadow-[0_8px_28px_rgba(232,160,32,0.35)] transition hover:-translate-y-0.5"
+            class="inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-l from-[#E8A020] to-[#f5ab2d] px-7 text-sm font-bold text-[#071F0D] shadow-[0_8px_28px_rgba(232,160,32,0.4)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_32px_rgba(232,160,32,0.5)] active:translate-y-0 active:scale-[0.98]"
             ><ShoppingCart :size="16" /> تسوق الآن</RouterLink
           ><RouterLink
             to="/merchants"
-            class="inline-flex h-12 items-center gap-2 rounded-xl border border-[var(--line-strong)] bg-[var(--glass-strong)] px-7 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--glass-strong)] hover:-translate-y-0.5"
+            class="inline-flex h-12 items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-7 text-sm font-semibold text-white backdrop-blur-md transition-all duration-200 hover:border-[#E8A020]/50 hover:bg-white/15 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
             ><Store :size="16" /> تصفح المتاجر</RouterLink
           >
         </div>
 
-        <div class="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-[var(--line)] pt-6">
+        <div class="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-white/15 pt-6">
           <div v-for="stat in heroStats" :key="stat.label">
             <p class="display-font text-2xl font-extrabold text-[#E8A020] sm:text-3xl">
               {{ stat.value }}
             </p>
-            <p class="mt-1 text-[12px] text-white/65">{{ stat.label }}</p>
+            <p class="mt-1 text-[12px] text-white/70">{{ stat.label }}</p>
           </div>
         </div>
       </div>
@@ -140,25 +160,47 @@ function searchProducts() {
         </p>
       </div>
       <form
-        class="flex items-center rounded-xl border border-[var(--line)] bg-[var(--panel)] p-1.5 focus-within:border-[#E8A020]/60"
+        class="group relative flex items-center gap-2 rounded-2xl border border-[var(--line)] bg-[var(--panel)]/95 p-1.5 sm:p-2 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[var(--line-strong)] hover:shadow-md focus-within:border-[#E8A020] focus-within:ring-4 focus-within:ring-[#E8A020]/15 focus-within:shadow-[0_8px_30px_rgba(232,160,32,0.12)]"
         @submit.prevent="searchProducts"
       >
-        <Search :size="17" class="mr-3 shrink-0 text-[var(--muted)]" /><label
-          class="sr-only"
-          for="home-search"
-          >ابحث عن زيت أو مصفاة أو علامة</label
-        ><input
+        <!-- Search Leading Icon with logical padding -->
+        <div
+          class="pointer-events-none flex shrink-0 items-center justify-center ps-2.5 sm:ps-3 text-[var(--muted)] transition-colors duration-200 group-focus-within:text-[#E8A020]"
+          aria-hidden="true"
+        >
+          <Search :size="19" class="stroke-[2.2]" />
+        </div>
+
+        <label class="sr-only" for="home-search"> ابحث عن زيت أو مصفاة أو علامة </label>
+
+        <!-- Input Field -->
+        <input
           id="home-search"
           v-model="search"
           type="search"
           placeholder="ابحث عن زيت أو مصفاة أو علامة…"
-          class="h-11 min-w-0 flex-1 bg-transparent px-3 text-sm text-[var(--text)] outline-none placeholder:text-[var(--muted)]"
-        /><UiButton
-          type="submit"
-          size="sm"
-          class="rounded-lg bg-[#E8A020] text-[12px] text-[#071F0D] hover:bg-[#F5C060]"
-          >بحث</UiButton
+          class="h-11 min-w-0 flex-1 bg-transparent px-2.5 text-sm sm:text-base font-medium text-[var(--text)] outline-none placeholder:text-[var(--muted)] placeholder:text-sm"
+        />
+
+        <!-- Clear Search Action -->
+        <button
+          v-if="search"
+          type="button"
+          aria-label="مسح البحث"
+          class="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-[var(--muted)] transition-colors hover:bg-[var(--glass)] hover:text-[var(--text)]"
+          @click="search = ''"
         >
+          <X :size="16" />
+        </button>
+
+        <!-- Modern Expert Search Button -->
+        <button
+          type="submit"
+          class="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-[#E8A020] to-[#f5ab2d] px-5 sm:px-6 text-sm font-bold text-[#071F0D] shadow-[0_4px_14px_rgba(232,160,32,0.30)] transition-all duration-200 hover:-translate-y-0.5 hover:from-[#f5ab2d] hover:to-[#ffb738] hover:shadow-[0_6px_22px_rgba(232,160,32,0.45)] active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A020] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--panel)]"
+        >
+          <Search :size="15" class="shrink-0 stroke-[2.5]" />
+          <span>بحث</span>
+        </button>
       </form>
     </section>
 

@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { formatPrice } from '@/lib/utils'
 import { readStoredJson } from '@/lib/storage'
 import { computed, ref } from 'vue'
@@ -59,21 +59,42 @@ function openShop() {
         ما الذي تبحث عنه<span class="text-[#E8A020]">؟</span>
       </h1>
     </div>
-    <label class="relative mt-9 flex items-center"
-      ><Search :size="19" class="absolute right-5 text-[var(--muted)]" /><input
+    <form
+      class="group relative mt-9 flex items-center gap-2 rounded-2xl border border-[var(--line)] bg-[var(--panel)]/95 p-2 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[var(--line-strong)] hover:shadow-md focus-within:border-[#E8A020] focus-within:ring-4 focus-within:ring-[#E8A020]/15 focus-within:shadow-[0_8px_30px_rgba(232,160,32,0.12)]"
+      @submit.prevent="openShop"
+    >
+      <div
+        class="pointer-events-none flex shrink-0 items-center justify-center ps-3 text-[var(--muted)] transition-colors duration-200 group-focus-within:text-[#E8A020]"
+        aria-hidden="true"
+      >
+        <Search :size="20" class="stroke-[2.2]" />
+      </div>
+      <label class="sr-only" for="search-page-input">ابحث في المنتجات</label>
+      <input
+        id="search-page-input"
         v-model="query"
         autofocus
         type="search"
-        placeholder="جرّب «5W-30» أو «رانيول» أو «مصافي»"
-        @keydown.enter="openShop"
-        class="h-14 w-full rounded-2xl border border-[var(--line)] bg-[var(--panel)] pr-13 pl-12 text-sm text-[var(--text)] outline-none placeholder:text-[var(--muted)] focus:border-[#E8A020]" /><button
+        placeholder="جرّب «5W-30» أو «رانيول» أو «مصافي»…"
+        class="h-12 min-w-0 flex-1 bg-transparent px-2.5 text-sm sm:text-base font-medium text-[var(--text)] outline-none placeholder:text-[var(--muted)]"
+      />
+      <button
         v-if="query"
+        type="button"
         aria-label="مسح البحث"
-        class="absolute left-4 text-[var(--muted)]"
+        class="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-[var(--muted)] transition-colors hover:bg-[var(--glass)] hover:text-[var(--text)]"
         @click="query = ''"
       >
-        <X :size="17" /></button
-    ></label>
+        <X :size="16" />
+      </button>
+      <button
+        type="submit"
+        class="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-[#E8A020] to-[#f5ab2d] px-6 text-sm font-bold text-[#071F0D] shadow-[0_4px_14px_rgba(232,160,32,0.30)] transition-all duration-200 hover:-translate-y-0.5 hover:from-[#f5ab2d] hover:to-[#ffb738] hover:shadow-[0_6px_22px_rgba(232,160,32,0.45)] active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A020] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--panel)]"
+      >
+        <Search :size="16" class="shrink-0 stroke-[2.5]" />
+        <span>بحث</span>
+      </button>
+    </form>
     <div v-if="!query" class="mt-8">
       <div class="flex items-center justify-between">
         <p class="text-[12px] font-bold uppercase text-[var(--muted)]">عمليات بحث سابقة</p>

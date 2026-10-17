@@ -49,15 +49,22 @@ function setSearch(event: Event) {
     </div>
 
     <!-- بحث داخل قائمة المتاجر (يقرأ ويكتب ‎?q=‎ في الرابط) -->
-    <label class="relative mt-4 flex items-center"
-      ><Search :size="18" class="absolute right-4 text-[var(--muted)]" /><input
+    <label class="group relative mt-4 flex items-center">
+      <div
+        class="pointer-events-none absolute start-4 flex items-center justify-center text-[var(--muted)] transition-colors duration-200 group-focus-within:text-[#E8A020]"
+        aria-hidden="true"
+      >
+        <Search :size="18" class="stroke-[2.2]" />
+      </div>
+      <input
         :value="route.query.q ?? ''"
         type="search"
         placeholder="ابحث عن متجر…"
         aria-label="ابحث عن متجر"
-        class="h-12 w-full rounded-2xl border border-[var(--line)] bg-[var(--panel)] pr-12 pl-4 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[#E8A020] focus:outline-none"
+        class="h-12 w-full rounded-2xl border border-[var(--line)] bg-[var(--panel)] ps-12 pe-4 text-sm font-medium text-[var(--text)] placeholder:text-[var(--muted)] transition-all duration-200 hover:border-[var(--line-strong)] focus:border-[#E8A020] focus:ring-4 focus:ring-[#E8A020]/15 focus:outline-none"
         @input="setSearch"
-    /></label>
+      />
+    </label>
 
     <p
       v-if="query && !visibleMerchants.length"
